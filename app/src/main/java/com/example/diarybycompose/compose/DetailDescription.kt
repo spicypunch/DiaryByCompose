@@ -1,4 +1,4 @@
-package com.example.diarybycompose.ui.detail
+package com.example.diarybycompose.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
