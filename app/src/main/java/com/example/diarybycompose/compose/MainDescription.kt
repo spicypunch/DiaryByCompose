@@ -1,4 +1,4 @@
-package com.example.diarybycompose.ui.main
+package com.example.diarybycompose.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.diarybycompose.R
 import com.example.diarybycompose.data.ItemEntity
-import com.example.diarybycompose.ui.theme.DiaryByComposeTheme
+import com.example.diarybycompose.compose.theme.DiaryByComposeTheme
 
 
 @Composable
