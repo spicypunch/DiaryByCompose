@@ -1,4 +1,4 @@
 package com.example.diarybycompose.compose
 
-class UpdateDescription {
+fun UpdateDescription() {
 }
