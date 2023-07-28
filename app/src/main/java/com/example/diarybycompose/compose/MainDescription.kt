@@ -4,20 +4,30 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,11 +52,16 @@ fun MainDescription() {
         ItemEntity(title = "test10", content = "test10"),
     )
 
+    SetBox(list, modifier = Modifier.fillMaxSize())
+}
+
+@Composable
+fun SetBox(list: List<ItemEntity>, modifier: Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             MyDiaryList(list)
@@ -66,39 +81,64 @@ fun MainDescription() {
 }
 
 @Composable
-fun MyDiaryList(diaryLists: List<ItemEntity>, modifier: Modifier = Modifier) {
+fun MyDiaryList(diaryLists: List<ItemEntity>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier,
-        contentPadding = PaddingValues(20.dp)
-    ) {
+
+        ) {
         items(diaryLists.size) { count ->
-            GridItem(diaryLists, count)
+            GridItem(diaryLists = diaryLists, count = count)
         }
     }
 }
 
 @Composable
-fun GridItem(diaryLists: List<ItemEntity>, count: Int) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+fun GridItem(
+    diaryLists: List<ItemEntity>,
+    count: Int,
+) {
+    var isFavorite by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Card(
+            modifier = Modifier.padding(8.dp),
+            shape = RoundedCornerShape(8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
         ) {
-            Image(
-                painter = painterResource(R.drawable.profile),
-                contentDescription = "MyDiaryImage"
-            )
-            Text(
-                text = diaryLists[count].title,
-                color = Color.Black,
-                modifier = Modifier.padding(8.dp),
-                textAlign = TextAlign.Center
-            )
+            Box() {
+                Image(
+                    painter = painterResource(R.drawable.profile),
+                    contentDescription = "MyDiaryImage",
+                    contentScale = ContentScale.Fit
+                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    IconButton(onClick = {
+                        isFavorite = !isFavorite
+                    }) {
+                        Icon(
+                            imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                            contentDescription = "favorite",
+                            tint = Color.Red
+                        )
+                    }
+                }
+            }
         }
+        Text(
+            text = diaryLists[count].title,
+            color = Color.Black,
+            modifier = Modifier.padding(8.dp),
+            textAlign = TextAlign.Center
+        )
     }
 }
 
