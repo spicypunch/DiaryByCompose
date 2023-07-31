@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateDescription(navController: NavController) {
+fun AddItemDescription(navController: NavController, onClicked: () -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val (title, setTitle) = rememberSaveable {
@@ -98,7 +98,6 @@ fun UpdateDescription(navController: NavController) {
                 onClick = { /*TODO*/ }
             ) {
                 Text(text = "등록")
-
             }
         }
     }
