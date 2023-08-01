@@ -1,6 +1,7 @@
 package com.example.diarybycompose.compose
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
@@ -33,7 +35,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemDescription(navController: NavController, onClicked: () -> Unit) {
+fun AddItemDescription(
+    navController: NavController,
+    onClicked: (String, String) -> Unit
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val (title, setTitle) = rememberSaveable {
@@ -43,9 +48,6 @@ fun AddItemDescription(navController: NavController, onClicked: () -> Unit) {
         mutableStateOf("")
     }
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        },
         topBar = {
             TopAppBar(
                 title = { Text(text = "일기 쓰기") },
@@ -56,11 +58,16 @@ fun AddItemDescription(navController: NavController, onClicked: () -> Unit) {
                         modifier = Modifier.clickable { navController.popBackStack() })
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
 
             Column(
             ) {
@@ -95,7 +102,17 @@ fun AddItemDescription(navController: NavController, onClicked: () -> Unit) {
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                onClick = { /*TODO*/ }
+                onClick = {
+                    if (title.isNotEmpty() && content.isNotEmpty()) {
+                        onClicked(
+                            title,
+                            content
+                        )
+                        scope.launch { snackbarHostState.showSnackbar("아이템을 추가하였습니다.") }
+                    } else {
+                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요.") }
+                    }
+                }
             ) {
                 Text(text = "등록")
             }

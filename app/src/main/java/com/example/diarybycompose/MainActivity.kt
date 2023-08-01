@@ -14,7 +14,9 @@ import com.example.diarybycompose.compose.DetailDescription
 import com.example.diarybycompose.compose.MainDescription
 import com.example.diarybycompose.compose.UpdateDescription
 import com.example.diarybycompose.compose.theme.DiaryByComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,22 +24,32 @@ class MainActivity : ComponentActivity() {
             val viewModel = viewModel<MainViewModel>()
             val navController = rememberNavController()
 
+            viewModel.getAllItem()
+
+            // 추후 수정
+            val insertItemResult = viewModel.insertResult.value
+
+            val allItem = viewModel.allItem.value
+
             NavHost(navController = navController, startDestination = "home") {
                 composable(route = "home") {
                     DiaryByComposeTheme {
-                        MainDescription(navController)
+                        MainDescription(navController, allItem)
                     }
                 }
                 composable(route = "add") {
                     DiaryByComposeTheme {
-                        AddItemDescription(navController) {
-
+                        AddItemDescription(navController) { title, content ->
+                            viewModel.insertItem(title, content)
+                            navController.popBackStack()
                         }
                     }
                 }
                 composable(route = "detail") {
                     DiaryByComposeTheme {
-                        DetailDescription(navController) {
+                        DetailDescription(navController, id, viewModel) {
+                            // 인자값 넘기는 거 가능한지
+                            // 바텀 내비게이션 가능한지
                             navController.navigate("update")
                         }
                     }
