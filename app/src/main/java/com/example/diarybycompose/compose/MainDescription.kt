@@ -23,10 +23,14 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,30 +39,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.diarybycompose.R
 import com.example.diarybycompose.data.ItemEntity
+import kotlinx.coroutines.launch
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainDescription(navController: NavController) {
-    val list = mutableListOf(
-        ItemEntity(title = "test1", content = "test1"),
-        ItemEntity(title = "test2", content = "test2"),
-        ItemEntity(title = "test3", content = "test3"),
-        ItemEntity(title = "test4", content = "test4"),
-        ItemEntity(title = "test5", content = "test5"),
-        ItemEntity(title = "test6", content = "test6"),
-        ItemEntity(title = "test7", content = "test7"),
-        ItemEntity(title = "test8", content = "test8"),
-        ItemEntity(title = "test9", content = "test9"),
-        ItemEntity(title = "test10", content = "test10"),
-    )
-    Scaffold() {
-        SetBox(list, modifier = Modifier.fillMaxSize(), navController) {
+fun MainDescription(
+    navController: NavController,
+    allItem: List<ItemEntity>?,
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+
+    ) {
+        SetBox(allItem, modifier = Modifier.fillMaxSize(), navController) {
             navController.navigate("add")
         }
     }
@@ -66,7 +69,7 @@ fun MainDescription(navController: NavController) {
 
 @Composable
 fun SetBox(
-    list: List<ItemEntity>,
+    list: List<ItemEntity>?,
     modifier: Modifier,
     navController: NavController,
     onClicked: () -> Unit
@@ -97,15 +100,16 @@ fun SetBox(
 }
 
 @Composable
-fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
+fun MyDiaryList(diaryLists: List<ItemEntity>?, navController: NavController) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier,
-        ) {
-        items(diaryLists.size) { count ->
-            GridItem(diaryLists = diaryLists, count = count) {
-                Log.e("test", "test")
-                navController.navigate("detail")
+    ) {
+        if (diaryLists != null) {
+            items(diaryLists.size) { count ->
+                GridItem(diaryLists = diaryLists, count = count) { id ->
+                    navController.navigate("detail/${id}")
+                }
             }
         }
     }
@@ -115,14 +119,14 @@ fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
 fun GridItem(
     diaryLists: List<ItemEntity>,
     count: Int,
-    onClicked: () -> Unit
+    onClicked: (id: Int) -> Unit
 ) {
     var isFavorite by rememberSaveable {
         mutableStateOf(false)
     }
 
     Column(
-        modifier = Modifier.clickable { onClicked },
+        modifier = Modifier.clickable { diaryLists[count].id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
