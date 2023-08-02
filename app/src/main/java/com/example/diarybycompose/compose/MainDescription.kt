@@ -27,6 +27,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,8 +43,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.diarybycompose.MainViewModel
 import com.example.diarybycompose.R
 import com.example.diarybycompose.data.ItemEntity
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -53,9 +56,37 @@ import kotlinx.coroutines.launch
 fun MainDescription(
     navController: NavController,
     allItem: List<ItemEntity>?,
+    viewModel: MainViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.insertResult.collectLatest {
+            if (it == true) {
+                snackbarHostState.showSnackbar("일기가 등록되었습니다.")
+            } else {
+                snackbarHostState.showSnackbar("등록에 실패하였습니다.")
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.deleteResult.collectLatest {
+            if (it == true) {
+                snackbarHostState.showSnackbar("일기가 삭제되었습니다.")
+            } else {
+                snackbarHostState.showSnackbar("삭제에 실패하였습니다.")
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getItem.collectLatest {
+            if (!it) {
+                snackbarHostState.showSnackbar("일기를 가져오는데 실패하였습니다.")
+            }
+        }
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -137,7 +168,7 @@ fun GridItem(
         ) {
             Box() {
                 Image(
-                    painter = painterResource(R.drawable.profile),
+                    painter = painterResource(R.drawable.basic),
                     contentDescription = "MyDiaryImage",
                     contentScale = ContentScale.Fit
                 )

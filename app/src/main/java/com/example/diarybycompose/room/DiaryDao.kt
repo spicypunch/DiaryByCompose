@@ -22,6 +22,9 @@ interface DiaryDao {
     @Delete
     fun deleteItem(item: ItemEntity)
 
+    @Query("DELETE FROM ItemEntity")
+    fun deleteAllItem()
+
     @Update
     fun updateItem(item: ItemEntity)
 
