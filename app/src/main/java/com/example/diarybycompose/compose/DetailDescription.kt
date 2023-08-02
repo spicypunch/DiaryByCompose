@@ -1,10 +1,12 @@
 package com.example.diarybycompose.compose
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,13 +41,13 @@ fun DetailDescription(
     navController: NavController,
     id: Int,
     viewModel: MainViewModel,
-    onClicked: () -> Unit
+    onClicked: (ItemEntity) -> Unit
 ) {
     viewModel.getItem(id)
     val item: ItemEntity? = viewModel.item.value
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -71,7 +73,7 @@ fun DetailDescription(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.facebook),
+                    painter = painterResource(id = R.drawable.basic),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -79,18 +81,38 @@ fun DetailDescription(
                         .align(Alignment.Start)
                         .align(Alignment.End)
                 )
-
-                Text(text = item!!.title, fontSize = 35.sp)
-                Text(text = item!!.content, fontSize = 20.sp)
+                item?.let {
+                    Text(text = item.title, fontSize = 35.sp)
+                    Text(text = item.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
+                    Text(text = item.content, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
+                }
             }
-            Button(
+            Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
-                onClick = { onClicked() }
+                    .padding(top = 16.dp)
             ) {
-                Text(text = "수정하기")
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (item != null) {
+                            onClicked(item)
+                        }
+                    }
+                ) {
+                    Text(text = "수정하기")
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (item != null) {
+                            viewModel.deleteItem(item)
+                        }
+                        navController.popBackStack()
+                    }) {
+                    Text(text = "삭제하기")
+                }
             }
         }
     }

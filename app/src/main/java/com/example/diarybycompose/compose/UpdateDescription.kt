@@ -33,7 +33,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateDescription(navController: NavController) {
+fun UpdateDescription(
+    navController: NavController,
+    onClicked: (String, String) -> Unit
+    ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val (title, setTitle) = rememberSaveable {
@@ -48,7 +51,7 @@ fun UpdateDescription(navController: NavController) {
         },
         topBar = {
             TopAppBar(
-                title = { Text(text = "일기 쓰기") },
+                title = { Text(text = "일기 수정") },
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -95,9 +98,15 @@ fun UpdateDescription(navController: NavController) {
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                onClick = { /*TODO*/ }
+                onClick = {
+                    if (title.isNotEmpty() && content.isNotEmpty()) {
+                        onClicked(title, content)
+                    } else {
+                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
+                    }
+                }
             ) {
-                Text(text = "등록")
+                Text(text = "수정")
 
             }
         }

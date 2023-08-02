@@ -8,7 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.diarybycompose.data.ItemEntity
 import com.example.diarybycompose.repository.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,22 +18,28 @@ class MainViewModel @Inject constructor(
     private val roomRepository: RoomRepositoryImpl
 ) : ViewModel() {
 
-    private val _insertResult = mutableStateOf<Boolean?>(null)
-    val insertResult: State<Boolean?> = _insertResult
+    private val _insertResult = MutableSharedFlow<Boolean>()
+    val insertResult = _insertResult.asSharedFlow()
+
+    private val _deleteResult = MutableSharedFlow<Boolean>()
+    val deleteResult = _deleteResult.asSharedFlow()
+
+    private val _getItem = MutableSharedFlow<Boolean>()
+    val getItem = _getItem.asSharedFlow()
 
     private val _allItem = mutableStateOf<List<ItemEntity>?>(null)
     val allItem: State<List<ItemEntity>?> = _allItem
 
     private val _item = mutableStateOf<ItemEntity?>(null)
     val item: State<ItemEntity?> = _item
-    fun insertItem(title: String, content: String) {
+    fun insertItem(title: String, content: String, date: String,) {
         viewModelScope.launch {
             try {
-                roomRepository.insertItem(ItemEntity(title = title, content = content))
-                _insertResult.value = true
+                roomRepository.insertItem(ItemEntity(title = title, content = content, date = date))
+                _insertResult.emit(true)
             } catch (e: Exception) {
                 Log.e("InsertItemErr", e.toString())
-                _insertResult.value = false
+                _insertResult.emit(false)
             }
         }
     }
@@ -44,6 +51,7 @@ class MainViewModel @Inject constructor(
                     _allItem.value = result
                 }
             } catch (e: Exception) {
+                _getItem.emit(false)
                 Log.e("GetAllItemErr", e.toString())
             }
         }
@@ -57,6 +65,30 @@ class MainViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("GetItemErr", e.toString())
+            }
+        }
+    }
+
+    fun deleteItem(item: ItemEntity) {
+        viewModelScope.launch {
+            try {
+                roomRepository.deleteItem(item)
+                _deleteResult.emit(true)
+            } catch (e: Exception) {
+                _deleteResult.emit(false)
+                Log.e("DeleteItemErr", e.toString())
+            }
+        }
+    }
+
+    fun deleteAllItem() {
+        viewModelScope.launch {
+            try {
+                roomRepository.deleteAllItem()
+                _deleteResult.emit(true)
+            } catch (e: Exception) {
+                _deleteResult.emit(false)
+                Log.e("DeleteAllItemErr", e.toString())
             }
         }
     }

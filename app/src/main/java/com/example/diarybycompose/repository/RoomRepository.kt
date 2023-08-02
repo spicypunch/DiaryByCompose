@@ -13,5 +13,7 @@ interface RoomRepository {
 
     suspend fun deleteItem(itemEntity: ItemEntity)
 
+    suspend fun deleteAllItem()
+
     suspend fun updateItem(itemEntity: ItemEntity)
 }
