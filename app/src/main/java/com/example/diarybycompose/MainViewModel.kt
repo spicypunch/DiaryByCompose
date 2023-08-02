@@ -92,4 +92,14 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateItem(item: ItemEntity) {
+        viewModelScope.launch {
+            try {
+                roomRepository.updateItem(item)
+            } catch (e: Exception) {
+                Log.e("UpdateItemErr", e.toString())
+            }
+        }
+    }
 }
