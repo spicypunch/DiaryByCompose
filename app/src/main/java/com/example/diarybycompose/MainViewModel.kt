@@ -27,10 +27,10 @@ class MainViewModel @Inject constructor(
     private val _getItem = MutableSharedFlow<Boolean>()
     val getItem = _getItem.asSharedFlow()
 
-    private val _allItem = mutableStateOf<List<ItemEntity>?>(null)
-    val allItem: State<List<ItemEntity>?> = _allItem
+    private val _allItem = mutableStateOf(emptyList<ItemEntity>())
+    val allItem: State<List<ItemEntity>> = _allItem
 
-    private val _item = mutableStateOf<ItemEntity?>(null)
+    private var _item = mutableStateOf<ItemEntity?>(null)
     val item: State<ItemEntity?> = _item
     fun insertItem(title: String, content: String, date: String,) {
         viewModelScope.launch {
