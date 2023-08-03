@@ -39,13 +39,10 @@ import com.example.diarybycompose.data.ItemEntity
 @Composable
 fun DetailDescription(
     navController: NavController,
-    id: Int,
+    item: ItemEntity,
     viewModel: MainViewModel,
     onClicked: (ItemEntity) -> Unit
 ) {
-    viewModel.getItem(id)
-    val item: ItemEntity? = viewModel.item.value
-
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -81,11 +78,13 @@ fun DetailDescription(
                         .align(Alignment.Start)
                         .align(Alignment.End)
                 )
-                item?.let {
-                    Text(text = item.title, fontSize = 35.sp)
-                    Text(text = item.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
-                    Text(text = item.content, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
-                }
+                Text(text = item.title, fontSize = 35.sp)
+                Text(text = item.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
+                Text(
+                    text = item.content,
+                    fontSize = 20.sp,
+                    modifier = Modifier.align(Alignment.Start)
+                )
             }
             Row(
                 modifier = Modifier
@@ -96,9 +95,7 @@ fun DetailDescription(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        if (item != null) {
-                            onClicked(item)
-                        }
+                        onClicked(item)
                     }
                 ) {
                     Text(text = "수정하기")
@@ -106,9 +103,7 @@ fun DetailDescription(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        if (item != null) {
-                            viewModel.deleteItem(item)
-                        }
+                        viewModel.deleteItem(item)
                         navController.popBackStack()
                     }) {
                     Text(text = "삭제하기")

@@ -138,8 +138,8 @@ fun MyDiaryList(diaryLists: List<ItemEntity>?, navController: NavController) {
     ) {
         if (diaryLists != null) {
             items(diaryLists.size) { count ->
-                GridItem(diaryLists = diaryLists, count = count) { id ->
-                    navController.navigate("detail/${id}")
+                GridItem(diaryLists = diaryLists, count = count) { item ->
+                    navController.navigate("detail/${item}")
                 }
             }
         }
@@ -150,14 +150,14 @@ fun MyDiaryList(diaryLists: List<ItemEntity>?, navController: NavController) {
 fun GridItem(
     diaryLists: List<ItemEntity>,
     count: Int,
-    onClicked: (id: Int) -> Unit
+    onClicked: (item: ItemEntity) -> Unit
 ) {
     var isFavorite by rememberSaveable {
         mutableStateOf(false)
     }
 
     Column(
-        modifier = Modifier.clickable { diaryLists[count].id?.let { onClicked(it) } },
+        modifier = Modifier.clickable { onClicked(diaryLists[count]) },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
