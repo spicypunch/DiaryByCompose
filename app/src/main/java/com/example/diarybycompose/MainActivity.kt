@@ -64,8 +64,6 @@ class MainActivity : ComponentActivity() {
                     item?.let {
                         DiaryByComposeTheme {
                             DetailDescription(navController, item, viewModel) {
-                                // 바텀 내비게이션 가능한지
-                                Log.e("test", it.toString())
                                 navController.navigate("update/${it}")
                             }
                         }
