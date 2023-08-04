@@ -50,11 +50,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                composable(route = "detail/{itemJsonString}") { backStackEntry ->
-                    val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
+                composable(route = "detail/{id}") { backStackEntry ->
+                    val id = backStackEntry.arguments?.getString("id")?.toInt()
                     DiaryByComposeTheme {
-                        itemJsonString?.let {
-                            DetailDescription(navController, itemJsonString, viewModel) { itemJsonString ->
+                        id?.let {
+                            DetailDescription(navController, id, viewModel) { itemJsonString ->
                                 navController.navigate("update/${itemJsonString}")
                             }
                         }

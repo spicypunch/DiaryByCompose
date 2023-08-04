@@ -1,7 +1,6 @@
 package com.example.diarybycompose.compose
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,21 +32,23 @@ import com.example.diarybycompose.MainViewModel
 import com.example.diarybycompose.R
 import com.example.diarybycompose.data.ItemEntity
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailDescription(
     navController: NavController,
-    itemJsonString: String,
+    id: Int,
     viewModel: MainViewModel,
     onClicked: (String) -> Unit
 ) {
-    val gson = Gson()
-    val itemType = object : TypeToken<ItemEntity>() {}.type
-    val itemEntity: ItemEntity = gson.fromJson(itemJsonString, itemType)
     val snackbarHostState = remember { SnackbarHostState() }
+
+    viewModel.getItem(id)
+    val itemEntity: ItemEntity? = viewModel.item.value
+
+    val gson = Gson()
+    val itemJsonString = gson.toJson(itemEntity)
 
     Scaffold(
         topBar = {
@@ -83,13 +83,11 @@ fun DetailDescription(
                         .align(Alignment.Start)
                         .align(Alignment.End)
                 )
-                Text(text = itemEntity.title, fontSize = 35.sp)
-                Text(text = itemEntity.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
-                Text(
-                    text = itemEntity.content,
-                    fontSize = 20.sp,
-                    modifier = Modifier.align(Alignment.Start)
-                )
+                itemEntity?.let {
+                    Text(text = itemEntity.title, fontSize = 35.sp)
+                    Text(text = itemEntity.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
+                    Text(text = itemEntity.content, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
+                }
             }
             Row(
                 modifier = Modifier
@@ -108,7 +106,9 @@ fun DetailDescription(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        viewModel.deleteItem(itemEntity)
+                        if (itemEntity != null) {
+                            viewModel.deleteItem(itemEntity)
+                        }
                         navController.popBackStack()
                     }) {
                     Text(text = "삭제하기")

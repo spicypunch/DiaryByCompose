@@ -138,10 +138,8 @@ fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
         modifier = Modifier,
     ) {
         items(diaryLists.size) { count ->
-            GridItem(diaryLists = diaryLists, count = count) { item ->
-                val gson = Gson()
-                val itemJsonString = gson.toJson(item)
-                navController.navigate("detail/${itemJsonString}")
+            GridItem(diaryLists = diaryLists, count = count) { id ->
+                navController.navigate("detail/$id")
             }
         }
     }
@@ -151,14 +149,14 @@ fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
 fun GridItem(
     diaryLists: List<ItemEntity>,
     count: Int,
-    onClicked: (item: ItemEntity) -> Unit
+    onClicked: (id: Int) -> Unit
 ) {
     var isFavorite by rememberSaveable {
         mutableStateOf(false)
     }
 
     Column(
-        modifier = Modifier.clickable { onClicked(diaryLists[count]) },
+        modifier = Modifier.clickable { diaryLists[count].id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
