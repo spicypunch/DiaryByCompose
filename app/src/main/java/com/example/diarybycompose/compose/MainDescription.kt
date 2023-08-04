@@ -46,6 +46,7 @@ import androidx.navigation.NavController
 import com.example.diarybycompose.MainViewModel
 import com.example.diarybycompose.R
 import com.example.diarybycompose.data.ItemEntity
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -55,7 +56,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainDescription(
     navController: NavController,
-    allItem: List<ItemEntity>?,
+    allItem: List<ItemEntity>,
     viewModel: MainViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -100,7 +101,7 @@ fun MainDescription(
 
 @Composable
 fun SetBox(
-    list: List<ItemEntity>?,
+    list: List<ItemEntity>,
     modifier: Modifier,
     navController: NavController,
     onClicked: () -> Unit
@@ -131,16 +132,16 @@ fun SetBox(
 }
 
 @Composable
-fun MyDiaryList(diaryLists: List<ItemEntity>?, navController: NavController) {
+fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier,
     ) {
-        if (diaryLists != null) {
-            items(diaryLists.size) { count ->
-                GridItem(diaryLists = diaryLists, count = count) { item ->
-                    navController.navigate("detail/${item}")
-                }
+        items(diaryLists.size) { count ->
+            GridItem(diaryLists = diaryLists, count = count) { item ->
+                val gson = Gson()
+                val itemJsonString = gson.toJson(item)
+                navController.navigate("detail/${itemJsonString}")
             }
         }
     }

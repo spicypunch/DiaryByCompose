@@ -45,35 +45,30 @@ class MainActivity : ComponentActivity() {
                 composable(route = "add") {
                     DiaryByComposeTheme {
                         AddItemDescription(navController) { title, content ->
-                            viewModel.insertItem(
-                                title,
-                                content,
-                                dateFormat.format(Date(currentTime))
-                            )
+                            viewModel.insertItem(title, content, dateFormat.format(Date(currentTime)))
                             navController.popBackStack()
                         }
                     }
                 }
-                composable(
-                    route = "detail/{item}",
-                    arguments = listOf(navArgument("item") {
-                        type = NavType.ParcelableType(ItemEntity::class.java)
-                    })
-                ) { backStackEntry ->
-                    val item = backStackEntry.arguments?.getParcelable<ItemEntity>("item")
-                    item?.let {
-                        DiaryByComposeTheme {
-                            DetailDescription(navController, item, viewModel) {
-                                navController.navigate("update/${it}")
+                composable(route = "detail/{itemJsonString}") { backStackEntry ->
+                    val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
+                    DiaryByComposeTheme {
+                        itemJsonString?.let {
+                            DetailDescription(navController, itemJsonString, viewModel) { itemJsonString ->
+                                navController.navigate("update/${itemJsonString}")
                             }
                         }
                     }
                 }
 
-                composable(route = "update") {
+                composable(route = "update/{itemJsonString}") { backStackEntry ->
+                    val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
                     DiaryByComposeTheme {
-                        UpdateDescription(navController) { title, content ->
-//                            viewModel.
+                        itemJsonString?.let {
+                            UpdateDescription(navController, itemJsonString) { itemEntity ->
+                                viewModel.updateItem(itemEntity)
+                                navController.popBackStack()
+                            }
                         }
                     }
                 }

@@ -33,16 +33,21 @@ import androidx.navigation.NavController
 import com.example.diarybycompose.MainViewModel
 import com.example.diarybycompose.R
 import com.example.diarybycompose.data.ItemEntity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailDescription(
     navController: NavController,
-    item: ItemEntity,
+    itemJsonString: String,
     viewModel: MainViewModel,
-    onClicked: (ItemEntity) -> Unit
+    onClicked: (String) -> Unit
 ) {
+    val gson = Gson()
+    val itemType = object : TypeToken<ItemEntity>() {}.type
+    val itemEntity: ItemEntity = gson.fromJson(itemJsonString, itemType)
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -78,10 +83,10 @@ fun DetailDescription(
                         .align(Alignment.Start)
                         .align(Alignment.End)
                 )
-                Text(text = item.title, fontSize = 35.sp)
-                Text(text = item.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
+                Text(text = itemEntity.title, fontSize = 35.sp)
+                Text(text = itemEntity.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
                 Text(
-                    text = item.content,
+                    text = itemEntity.content,
                     fontSize = 20.sp,
                     modifier = Modifier.align(Alignment.Start)
                 )
@@ -95,7 +100,7 @@ fun DetailDescription(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        onClicked(item)
+                        onClicked(itemJsonString)
                     }
                 ) {
                     Text(text = "수정하기")
@@ -103,7 +108,7 @@ fun DetailDescription(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        viewModel.deleteItem(item)
+                        viewModel.deleteItem(itemEntity)
                         navController.popBackStack()
                     }) {
                     Text(text = "삭제하기")

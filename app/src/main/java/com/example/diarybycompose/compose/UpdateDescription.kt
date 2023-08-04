@@ -28,6 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.diarybycompose.data.ItemEntity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -35,15 +38,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun UpdateDescription(
     navController: NavController,
-    onClicked: (String, String) -> Unit
-    ) {
+    itemJsonString: String,
+    onClicked: (ItemEntity) -> Unit
+) {
+    val gson = Gson()
+    val itemType = object : TypeToken<ItemEntity>() {}.type
+    val itemEntity: ItemEntity = gson.fromJson(itemJsonString, itemType)
+
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val (title, setTitle) = rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf(itemEntity.title)
     }
     val (content, setContent) = rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf(itemEntity.content)
     }
     Scaffold(
         snackbarHost = {
@@ -61,9 +69,11 @@ fun UpdateDescription(
             )
         }
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
 
             Column(
             ) {
@@ -87,7 +97,7 @@ fun UpdateDescription(
                     modifier = Modifier.padding(top = 16.dp),
                     onClick = {
                         scope.launch {
-                            snackbarHostState.showSnackbar("이미지 기능 추가 얘정")
+                            snackbarHostState.showSnackbar("이미지 기능 추가 예정")
                         }
                     }) {
                     Text(text = "사 진\n추 가")
@@ -100,7 +110,15 @@ fun UpdateDescription(
                     .padding(top = 16.dp),
                 onClick = {
                     if (title.isNotEmpty() && content.isNotEmpty()) {
-                        onClicked(title, content)
+                        onClicked(
+                            ItemEntity(
+                                id = itemEntity.id,
+                                image = itemEntity.image,
+                                title = title,
+                                content = content,
+                                date = itemEntity.date
+                            )
+                        )
                     } else {
                         scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
                     }
