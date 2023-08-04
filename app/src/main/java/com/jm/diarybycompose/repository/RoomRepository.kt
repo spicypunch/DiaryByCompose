@@ -1,6 +1,6 @@
-package com.example.diarybycompose.repository
+package com.jm.diarybycompose.repository
 
-import com.example.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.ItemEntity
 import kotlinx.coroutines.flow.Flow
 
 interface RoomRepository {

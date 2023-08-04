@@ -1,4 +1,4 @@
-package com.example.diarybycompose.compose.theme
+package com.jm.diarybycompose.compose.theme
 
 import android.app.Activity
 import android.os.Build
