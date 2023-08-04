@@ -1,4 +1,4 @@
-package com.example.diarybycompose.compose
+package com.jm.diarybycompose.compose
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -28,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.ItemEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch

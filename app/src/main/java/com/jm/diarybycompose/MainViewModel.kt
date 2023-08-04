@@ -1,12 +1,12 @@
-package com.example.diarybycompose
+package com.jm.diarybycompose
 
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.diarybycompose.data.ItemEntity
-import com.example.diarybycompose.repository.RoomRepositoryImpl
+import com.jm.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.repository.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

@@ -1,4 +1,4 @@
-package com.example.diarybycompose.data
+package com.jm.diarybycompose.data
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

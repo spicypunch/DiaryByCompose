@@ -1,4 +1,4 @@
-package com.example.diarybycompose
+package com.jm.diarybycompose
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

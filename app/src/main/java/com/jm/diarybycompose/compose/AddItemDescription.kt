@@ -1,4 +1,4 @@
-package com.example.diarybycompose.compose
+package com.jm.diarybycompose.compose
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
