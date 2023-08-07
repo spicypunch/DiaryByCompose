@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,7 +50,7 @@ import kotlinx.coroutines.flow.collectLatest
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainDescription(
+fun MainScreen(
     navController: NavController,
     allItem: List<ItemEntity>,
     viewModel: MainViewModel
@@ -119,7 +120,7 @@ fun SetBox(
                 .align(Alignment.BottomEnd)
         ) {
             Icon(
-                imageVector = Icons.Default.Add,
+                imageVector = Icons.Default.KeyboardArrowUp,
                 contentDescription = "Add",
             )
         }

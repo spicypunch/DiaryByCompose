@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateDescription(
+fun UpdateScreen(
     navController: NavController,
     itemJsonString: String,
     onClicked: (ItemEntity) -> Unit

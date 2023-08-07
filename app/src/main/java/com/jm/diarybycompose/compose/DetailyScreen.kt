@@ -36,7 +36,7 @@ import com.google.gson.Gson
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailDescription(
+fun DetailScreen(
     navController: NavController,
     id: Int,
     viewModel: MainViewModel,
