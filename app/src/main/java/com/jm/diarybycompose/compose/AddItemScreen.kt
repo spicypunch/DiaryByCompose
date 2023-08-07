@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemDescription(
+fun AddScreen(
     navController: NavController,
     onClicked: (String, String) -> Unit
 ) {
