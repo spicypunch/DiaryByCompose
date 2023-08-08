@@ -1,7 +1,9 @@
 package com.jm.diarybycompose.compose
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,6 +49,7 @@ import com.example.diarybycompose.R
 import com.jm.diarybycompose.MainViewModel
 import com.jm.diarybycompose.data.ItemEntity
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -89,9 +94,7 @@ fun MainScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) }
 
     ) {
-        SetBox(allItem, modifier = Modifier.fillMaxSize(), navController) {
-            navController.navigate("add")
-        }
+        SetBox(allItem, modifier = Modifier.fillMaxSize(), navController)
     }
 }
 
@@ -100,7 +103,6 @@ fun SetBox(
     list: List<ItemEntity>,
     modifier: Modifier,
     navController: NavController,
-    onClicked: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -111,19 +113,18 @@ fun SetBox(
         ) {
             MyDiaryList(list, navController)
         }
-        FloatingActionButton(
-            onClick = {
-                onClicked()
-            },
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomEnd)
-        ) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowUp,
-                contentDescription = "Add",
-            )
-        }
+//        FloatingActionButton(
+//            onClick = {
+//            },
+//            modifier = Modifier
+//                .padding(16.dp)
+//                .align(Alignment.BottomEnd)
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.KeyboardArrowUp,
+//                contentDescription = "scroll to top",
+//            )
+//        }
     }
 }
 
