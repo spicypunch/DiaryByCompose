@@ -1,11 +1,19 @@
 package com.jm.diarybycompose
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -14,9 +22,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -41,8 +55,43 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DiaryByComposeTheme {
-                App()
+                val permissionsList = arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+                var grantedList by remember { mutableStateOf(mutableListOf(false)) }
+                val launcher =
+                    rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
+                        grantedList = isGranted.values.toMutableList()
+                    }
+                if (grantedList.isEmpty()) {
+                    grantedList = permissionsList.map {
+                        ContextCompat.checkSelfPermission(
+                            LocalContext.current,
+                            it
+                        ) == PackageManager.PERMISSION_GRANTED
+                    }.toMutableList()
+                }
+
+                if (grantedList.count { it } == grantedList.size) {
+                    App()
+                } else {
+                    DemandPermissionScreen() {
+                        launcher.launch(permissionsList)
+                    }
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun DemandPermissionScreen(onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "권한을 허용해주세요.")
+        Button(onClick = { onClick() }) {
+            Text(text = "권한 요청")
         }
     }
 }
