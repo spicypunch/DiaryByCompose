@@ -55,7 +55,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DiaryByComposeTheme {
-                val permissionsList = arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+                val permissionsList = arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.CAMERA,
+                )
                 var grantedList by remember { mutableStateOf(mutableListOf(false)) }
                 val launcher =
                     rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
