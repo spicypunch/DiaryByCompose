@@ -1,6 +1,15 @@
 package com.jm.diarybycompose.compose
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Application
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,6 +55,48 @@ fun AddScreen(
     val (content, setContent) = rememberSaveable {
         mutableStateOf("")
     }
+
+    var imageUri: Uri? = null
+
+    val intent =
+        Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+        }
+
+    val imageFromCamera =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            if (it != null) {
+
+            } else {
+
+            }
+        }
+
+    val imageFromStorage =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                it.data?.data?.let { uri ->
+                    imageUri = uri
+                } ?: run {
+
+                }
+            } else if (it.resultCode != Activity.RESULT_CANCELED) {
+
+            }
+        }
+
+//    val takePhotoFromAlbumIntent =
+//        Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+//            type = "image/*"
+//            action = Intent.ACTION_GET_CONTENT
+//            putExtra(
+//                Intent.EXTRA_MIME_TYPES,
+//                arrayOf("image/jpeg", "image/png", "image/bmp", "image/webp")
+//            )
+//            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+//        }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -88,12 +140,12 @@ fun AddScreen(
                 Button(
                     modifier = Modifier.padding(top = 16.dp),
                     onClick = {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("이미지 기능 추가 얘정")
-                        }
+                        imageFromStorage.launch(intent)
                     }) {
                     Text(text = "사 진\n추 가")
                 }
+                Log.e("test", imageUri.toString())
+                Image(painter = rememberImagePainter(data = imageUri), contentDescription = null)
             }
             Button(
                 modifier = Modifier
@@ -112,4 +164,12 @@ fun AddScreen(
             }
         }
     }
+}
+
+private fun imageIntent() {
+    val intent =
+        Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+        }
 }
