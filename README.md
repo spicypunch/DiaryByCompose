@@ -1,12 +1,12 @@
 # DiaryByCompose
 구현해야할 것들
-
+<br>
 Image
-
+<br>
 OnLongclick
-
+<br>
 Viewpager2
-
+<br>
 filter
-
-검색
+<br>
+검색기능
