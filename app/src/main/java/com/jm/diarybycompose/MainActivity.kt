@@ -3,11 +3,14 @@ package com.jm.diarybycompose
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +54,8 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @SuppressLint("MutableCollectionMutableState")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -60,18 +65,18 @@ class MainActivity : ComponentActivity() {
                     Manifest.permission.CAMERA,
                 )
                 var grantedList by remember { mutableStateOf(mutableListOf(false)) }
+
                 val launcher =
                     rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
                         grantedList = isGranted.values.toMutableList()
                     }
-                if (grantedList.isEmpty()) {
-                    grantedList = permissionsList.map {
-                        ContextCompat.checkSelfPermission(
-                            LocalContext.current,
-                            it
-                        ) == PackageManager.PERMISSION_GRANTED
-                    }.toMutableList()
-                }
+
+                grantedList = permissionsList.map {
+                    ContextCompat.checkSelfPermission(
+                        LocalContext.current,
+                        it
+                    ) == PackageManager.PERMISSION_GRANTED
+                }.toMutableList()
 
                 if (grantedList.count { it } == grantedList.size) {
                     App()
@@ -111,6 +116,7 @@ fun App() {
     viewModel.getAllItem()
 
     val allItem = viewModel.allItem.value
+
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
