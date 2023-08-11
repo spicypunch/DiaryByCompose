@@ -1,6 +1,5 @@
 # DiaryByCompose
 #### 구현해야할 것들
-<br>
 카메라, 갤러리에서 이미지 불러오기
 <br>
 OnLongclick으로 아이템 선택 삭제
