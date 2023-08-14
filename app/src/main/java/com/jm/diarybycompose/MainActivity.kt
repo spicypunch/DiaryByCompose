@@ -123,7 +123,6 @@ fun App() {
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
-        BottomNavItem.Setting,
     )
     Scaffold(
         bottomBar = {
@@ -171,10 +170,6 @@ fun App() {
                         )
                         navController.popBackStack()
                     }
-                }
-
-                composable(route = BottomNavItem.Setting.route) {
-                    SettingScreen()
                 }
 
                 composable(
