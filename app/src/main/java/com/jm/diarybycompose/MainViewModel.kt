@@ -1,5 +1,6 @@
 package com.jm.diarybycompose
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -32,10 +33,11 @@ class MainViewModel @Inject constructor(
 
     private var _item = mutableStateOf<ItemEntity?>(null)
     val item: State<ItemEntity?> = _item
-    fun insertItem(title: String, content: String, date: String,) {
+
+    fun insertItem(title: String, content: String, imageUri: Uri?, date: String,) {
         viewModelScope.launch {
             try {
-                roomRepository.insertItem(ItemEntity(title = title, content = content, date = date))
+                roomRepository.insertItem(ItemEntity(title = title, content = content, imageUri = imageUri.toString(), date = date))
                 _insertResult.emit(true)
             } catch (e: Exception) {
                 Log.e("InsertItemErr", e.toString())

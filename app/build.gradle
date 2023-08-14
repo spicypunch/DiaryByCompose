@@ -48,7 +48,16 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    dataBinding {
+        enable = true
+    }
 }
+
+configurations {
+    implementation.exclude group:'com.android.support'
+}
+
 
 dependencies {
 

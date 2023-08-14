@@ -159,11 +159,12 @@ fun App() {
                     MainScreen(navController, allItem, viewModel)
                 }
                 composable(route = BottomNavItem.Add.route) {
-                    AddScreen(navController) { title, content ->
+                    AddScreen(navController) { title, content, uri ->
                         viewModel.insertItem(
-                            title,
-                            content,
-                            dateFormat.format(Date(currentTime))
+                            title = title,
+                            content = content,
+                            imageUri = uri,
+                            date = dateFormat.format(Date(currentTime))
                         )
                         navController.popBackStack()
                     }
