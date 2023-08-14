@@ -3,28 +3,22 @@ package com.jm.diarybycompose.compose
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -36,25 +30,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.diarybycompose.R
 import com.jm.diarybycompose.MainViewModel
 import com.jm.diarybycompose.data.ItemEntity
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
+lateinit var mainViewModel: MainViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,8 +57,10 @@ fun MainScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
+    mainViewModel = viewModel
+
     LaunchedEffect(Unit) {
-        viewModel.insertResult.collectLatest {
+        mainViewModel.insertResult.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar("일기가 등록되었습니다.")
             } else {
@@ -77,7 +70,7 @@ fun MainScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.deleteResult.collectLatest {
+        mainViewModel.deleteResult.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar("일기가 삭제되었습니다.")
             } else {
@@ -87,7 +80,7 @@ fun MainScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getItem.collectLatest {
+        mainViewModel.getItem.collectLatest {
             if (!it) {
                 snackbarHostState.showSnackbar("일기를 가져오는데 실패하였습니다.")
             }
@@ -117,18 +110,6 @@ fun SetBox(
         ) {
             MyDiaryList(list, navController)
         }
-//        FloatingActionButton(
-//            onClick = {
-//            },
-//            modifier = Modifier
-//                .padding(16.dp)
-//                .align(Alignment.BottomEnd)
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.KeyboardArrowUp,
-//                contentDescription = "scroll to top",
-//            )
-//        }
     }
 }
 
@@ -152,9 +133,6 @@ fun GridItem(
     count: Int,
     onClicked: (id: Int) -> Unit
 ) {
-    var isFavorite by rememberSaveable {
-        mutableStateOf(false)
-    }
     Column(
         modifier = Modifier.clickable { diaryLists[count].id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
@@ -177,10 +155,19 @@ fun GridItem(
                     contentAlignment = Alignment.TopEnd
                 ) {
                     IconButton(onClick = {
-                        isFavorite = !isFavorite
+                        mainViewModel.updateItem(
+                            ItemEntity(
+                                id = diaryLists[count].id,
+                                title = diaryLists[count].title,
+                                content = diaryLists[count].content,
+                                imageUri = diaryLists[count].imageUri,
+                                date = diaryLists[count].date,
+                                like = !diaryLists[count].like
+                            )
+                        )
                     }) {
                         Icon(
-                            imageVector = if (!isFavorite) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                            imageVector = if (!diaryLists[count].like) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
                             contentDescription = "favorite",
                             tint = Color.Red
                         )
