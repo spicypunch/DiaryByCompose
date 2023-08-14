@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -44,7 +43,6 @@ import androidx.navigation.navArgument
 import com.jm.diarybycompose.compose.AddScreen
 import com.jm.diarybycompose.compose.DetailScreen
 import com.jm.diarybycompose.compose.MainScreen
-import com.jm.diarybycompose.compose.SettingScreen
 import com.jm.diarybycompose.compose.UpdateScreen
 import com.jm.diarybycompose.compose.theme.DiaryByComposeTheme
 import dagger.hilt.android.AndroidEntryPoint

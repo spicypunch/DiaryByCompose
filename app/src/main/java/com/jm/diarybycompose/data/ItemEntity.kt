@@ -15,5 +15,5 @@ data class ItemEntity(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "date") val date: String,
-//    @ColumnInfo(name = "like") var
+    @ColumnInfo(name = "like") val like: Boolean
 ): Parcelable

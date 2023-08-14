@@ -113,5 +113,6 @@ dependencies {
     implementation 'io.github.ParkSangGwon:tedimagepicker:1.4.2'
 
     // ViewPager2
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation "com.google.accompanist:accompanist-pager:0.20.1"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.20.1"
 }

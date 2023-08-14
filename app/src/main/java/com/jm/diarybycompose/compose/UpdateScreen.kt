@@ -149,7 +149,8 @@ fun UpdateScreen(
                                 imageUri = imageUri.toString(),
                                 title = title,
                                 content = content,
-                                date = itemEntity.date
+                                date = itemEntity.date,
+                                like = itemEntity.like
                             )
                         )
                     } else {
