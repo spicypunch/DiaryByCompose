@@ -1,13 +1,17 @@
 package com.jm.diarybycompose.compose
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -20,17 +24,25 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.jm.diarybycompose.data.ItemEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -53,6 +65,11 @@ fun UpdateScreen(
     val (content, setContent) = rememberSaveable {
         mutableStateOf(itemEntity.content)
     }
+    var imageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    val context = LocalContext.current
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackbarHostState)
@@ -96,12 +113,23 @@ fun UpdateScreen(
                 Button(
                     modifier = Modifier.padding(top = 16.dp),
                     onClick = {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("이미지 기능 추가 예정")
+                        TedImagePicker.with(context).start { uri ->
+                            imageUri = uri
                         }
                     }) {
                     Text(text = "사 진\n추 가")
                 }
+                Image(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .padding(top = 16.dp)
+                        .padding(start = 8.dp)
+                        .aspectRatio(1f)
+                        .clip(RectangleShape),
+                    painter = rememberImagePainter(data = imageUri),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
             }
             Button(
                 modifier = Modifier
@@ -113,7 +141,7 @@ fun UpdateScreen(
                         onClicked(
                             ItemEntity(
                                 id = itemEntity.id,
-                                image = itemEntity.image,
+                                imageUri = itemEntity.imageUri,
                                 title = title,
                                 content = content,
                                 date = itemEntity.date

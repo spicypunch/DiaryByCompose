@@ -13,10 +13,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -29,15 +32,22 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,7 +55,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddScreen(
     navController: NavController,
-    onClicked: (String, String) -> Unit
+    onClicked: (String, String, Uri?) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -55,47 +65,10 @@ fun AddScreen(
     val (content, setContent) = rememberSaveable {
         mutableStateOf("")
     }
-
-    var imageUri: Uri? = null
-
-    val intent =
-        Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            type = "image/*"
-            action = Intent.ACTION_GET_CONTENT
-        }
-
-    val imageFromCamera =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-            if (it != null) {
-
-            } else {
-
-            }
-        }
-
-    val imageFromStorage =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                it.data?.data?.let { uri ->
-                    imageUri = uri
-                } ?: run {
-
-                }
-            } else if (it.resultCode != Activity.RESULT_CANCELED) {
-
-            }
-        }
-
-//    val takePhotoFromAlbumIntent =
-//        Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-//            type = "image/*"
-//            action = Intent.ACTION_GET_CONTENT
-//            putExtra(
-//                Intent.EXTRA_MIME_TYPES,
-//                arrayOf("image/jpeg", "image/png", "image/bmp", "image/webp")
-//            )
-//            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
-//        }
+    var imageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -137,15 +110,29 @@ fun AddScreen(
                         .fillMaxWidth()
                         .height(400.dp)
                 )
-                Button(
-                    modifier = Modifier.padding(top = 16.dp),
-                    onClick = {
-                        imageFromStorage.launch(intent)
-                    }) {
-                    Text(text = "사 진\n추 가")
+                Row(
+                ) {
+                    Button(
+                        modifier = Modifier.padding(top = 16.dp),
+                        onClick = {
+                            TedImagePicker.with(context).start { uri ->
+                                imageUri = uri
+                            }
+                        }) {
+                        Text(text = "사 진\n추 가")
+                    }
+                    Image(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .padding(top = 16.dp)
+                            .padding(start = 8.dp)
+                            .aspectRatio(1f)
+                            .clip(RectangleShape),
+                        painter = rememberImagePainter(data = imageUri),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
                 }
-                Log.e("test", imageUri.toString())
-                Image(painter = rememberImagePainter(data = imageUri), contentDescription = null)
             }
             Button(
                 modifier = Modifier
@@ -154,7 +141,7 @@ fun AddScreen(
                     .padding(top = 16.dp),
                 onClick = {
                     if (title.isNotEmpty() && content.isNotEmpty()) {
-                        onClicked(title, content)
+                        onClicked(title, content, imageUri)
                     } else {
                         scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요.") }
                     }
@@ -164,12 +151,4 @@ fun AddScreen(
             }
         }
     }
-}
-
-private fun imageIntent() {
-    val intent =
-        Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            type = "image/*"
-            action = Intent.ACTION_GET_CONTENT
-        }
 }

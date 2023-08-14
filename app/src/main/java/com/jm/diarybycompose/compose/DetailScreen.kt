@@ -24,10 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.diarybycompose.R
 import com.jm.diarybycompose.MainViewModel
 import com.jm.diarybycompose.data.ItemEntity
@@ -46,7 +48,6 @@ fun DetailScreen(
 
     viewModel.getItem(id)
     val itemEntity: ItemEntity? = viewModel.item.value
-
     val gson = Gson()
     val itemJsonString = gson.toJson(itemEntity)
 
@@ -75,13 +76,14 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.basic),
+                    painter = rememberImagePainter(data = if (itemEntity?.imageUri != "null") itemEntity?.imageUri else R.drawable.diary),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
                         .align(Alignment.Start)
-                        .align(Alignment.End)
+                        .align(Alignment.End),
+                    contentScale = ContentScale.Inside
                 )
                 itemEntity?.let {
                     Text(text = itemEntity.title, fontSize = 35.sp)

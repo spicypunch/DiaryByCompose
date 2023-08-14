@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -44,7 +46,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.diarybycompose.R
 import com.jm.diarybycompose.MainViewModel
 import com.jm.diarybycompose.data.ItemEntity
@@ -64,7 +68,7 @@ fun MainScreen(
 
     LaunchedEffect(Unit) {
         viewModel.insertResult.collectLatest {
-            if (it == true) {
+            if (it) {
                 snackbarHostState.showSnackbar("일기가 등록되었습니다.")
             } else {
                 snackbarHostState.showSnackbar("등록에 실패하였습니다.")
@@ -74,7 +78,7 @@ fun MainScreen(
 
     LaunchedEffect(Unit) {
         viewModel.deleteResult.collectLatest {
-            if (it == true) {
+            if (it) {
                 snackbarHostState.showSnackbar("일기가 삭제되었습니다.")
             } else {
                 snackbarHostState.showSnackbar("삭제에 실패하였습니다.")
@@ -151,7 +155,6 @@ fun GridItem(
     var isFavorite by rememberSaveable {
         mutableStateOf(false)
     }
-
     Column(
         modifier = Modifier.clickable { diaryLists[count].id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
@@ -164,9 +167,10 @@ fun GridItem(
         ) {
             Box() {
                 Image(
-                    painter = painterResource(R.drawable.basic),
+                    painter = rememberImagePainter(data = if (diaryLists[count].imageUri != "null") diaryLists[count].imageUri else R.drawable.diary),
                     contentDescription = "MyDiaryImage",
-                    contentScale = ContentScale.Fit
+                    modifier = Modifier.size(230.dp),
+                    contentScale = if (diaryLists[count].imageUri != "null") ContentScale.Crop else ContentScale.Fit
                 )
                 Box(
                     modifier = Modifier.fillMaxSize(),
