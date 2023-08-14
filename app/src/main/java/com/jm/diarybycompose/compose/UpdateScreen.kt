@@ -158,7 +158,6 @@ fun UpdateScreen(
                 }
             ) {
                 Text(text = "수정")
-
             }
         }
     }
