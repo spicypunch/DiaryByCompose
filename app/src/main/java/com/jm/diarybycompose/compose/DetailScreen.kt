@@ -100,6 +100,7 @@ fun DetailScreen(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
+
                         onClicked(itemJsonString)
                     }
                 ) {

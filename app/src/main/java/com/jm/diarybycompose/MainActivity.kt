@@ -48,6 +48,9 @@ import com.jm.diarybycompose.compose.SettingScreen
 import com.jm.diarybycompose.compose.UpdateScreen
 import com.jm.diarybycompose.compose.theme.DiaryByComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -184,7 +187,7 @@ fun App() {
                     val id = backStackEntry.arguments?.getInt("id")
                     id?.let {
                         DetailScreen(navController, id, viewModel) { itemJsonString ->
-                            navController.navigate("update/${itemJsonString}")
+                            navController.navigate("update/${URLEncoder.encode(itemJsonString, StandardCharsets.UTF_8.toString())}")
                         }
                     }
                 }
@@ -192,7 +195,7 @@ fun App() {
                 composable(route = "update/{itemJsonString}") { backStackEntry ->
                     val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
                     itemJsonString?.let {
-                        UpdateScreen(navController, itemJsonString) { itemEntity ->
+                        UpdateScreen(navController, URLDecoder.decode(itemJsonString, StandardCharsets.UTF_8.toString())) { itemEntity ->
                             viewModel.updateItem(itemEntity)
                             navController.popBackStack()
                         }

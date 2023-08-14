@@ -11,8 +11,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ItemEntity(
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
-    @ColumnInfo(name = "image") var imageUri: String? = null,
-    @ColumnInfo(name = "title") var title: String,
-    @ColumnInfo(name = "content") var content: String,
-    @ColumnInfo(name = "date") var date: String,
+    @ColumnInfo(name = "image") val imageUri: String? = null,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "content") val content: String,
+    @ColumnInfo(name = "date") val date: String,
+//    @ColumnInfo(name = "like") var
 ): Parcelable
