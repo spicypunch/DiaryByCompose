@@ -110,8 +110,7 @@ fun AddScreen(
                         .fillMaxWidth()
                         .height(400.dp)
                 )
-                Row(
-                ) {
+                Row {
                     Button(
                         modifier = Modifier.padding(top = 16.dp),
                         onClick = {

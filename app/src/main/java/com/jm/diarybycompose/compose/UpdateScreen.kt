@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.jm.diarybycompose.data.ItemEntity
@@ -66,7 +68,7 @@ fun UpdateScreen(
         mutableStateOf(itemEntity.content)
     }
     var imageUri by remember {
-        mutableStateOf<Uri?>(null)
+        mutableStateOf(itemEntity.imageUri?.toUri())
     }
     val context = LocalContext.current
 
@@ -110,26 +112,29 @@ fun UpdateScreen(
                         .fillMaxWidth()
                         .height(400.dp)
                 )
-                Button(
-                    modifier = Modifier.padding(top = 16.dp),
-                    onClick = {
-                        TedImagePicker.with(context).start { uri ->
-                            imageUri = uri
-                        }
-                    }) {
-                    Text(text = "사 진\n추 가")
+                Row {
+                    Button(
+                        modifier = Modifier.padding(top = 16.dp),
+                        onClick = {
+                            TedImagePicker.with(context).start { uri ->
+                                imageUri = uri
+                            }
+                        }) {
+                        Text(text = "사 진\n추 가")
+                    }
+                    Image(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .padding(top = 16.dp)
+                            .padding(start = 8.dp)
+                            .aspectRatio(1f)
+                            .clip(RectangleShape),
+                        painter = rememberImagePainter(data = imageUri),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
                 }
-                Image(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(top = 16.dp)
-                        .padding(start = 8.dp)
-                        .aspectRatio(1f)
-                        .clip(RectangleShape),
-                    painter = rememberImagePainter(data = imageUri),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
+
             }
             Button(
                 modifier = Modifier
@@ -141,7 +146,7 @@ fun UpdateScreen(
                         onClicked(
                             ItemEntity(
                                 id = itemEntity.id,
-                                imageUri = itemEntity.imageUri,
+                                imageUri = imageUri.toString(),
                                 title = title,
                                 content = content,
                                 date = itemEntity.date
