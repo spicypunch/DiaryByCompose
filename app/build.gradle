@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.diarybycompose'
+    namespace 'com.jm.diarybycompose'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.diarybycompose"
+        applicationId "com.jm.diarybycompose"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -84,8 +84,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1"
-//    implementation "androidx.navigation:navigation-fragment-ktx:2.7.0-rc01"
-//    implementation "androidx.navigation:navigation-ui-ktx:2.7.0-rc01"
 
     // DI
     implementation "com.google.dagger:hilt-android:2.44.2"
@@ -93,7 +91,7 @@ dependencies {
 
     // Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4"
 
     // room
     implementation "androidx.room:room-runtime:2.5.2"
@@ -107,10 +105,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.6.1"
 
     // coil
-    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation "io.coil-kt:coil-compose:1.4.0"
 
     // TedImagePicker
-    implementation 'io.github.ParkSangGwon:tedimagepicker:1.4.2'
+    implementation "io.github.ParkSangGwon:tedimagepicker:1.4.2"
 
     // ViewPager2
     implementation "com.google.accompanist:accompanist-pager:0.20.1"
