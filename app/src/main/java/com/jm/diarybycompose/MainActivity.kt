@@ -41,6 +41,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.jm.diarybycompose.compose.AddScreen
+import com.jm.diarybycompose.compose.CalendarScreen
 import com.jm.diarybycompose.compose.DetailScreen
 import com.jm.diarybycompose.compose.MainScreen
 import com.jm.diarybycompose.compose.UpdateScreen
@@ -121,6 +122,7 @@ fun App() {
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
+        BottomNavItem.Calendar,
     )
     Scaffold(
         bottomBar = {
@@ -169,7 +171,9 @@ fun App() {
                         navController.popBackStack()
                     }
                 }
-
+                composable(route = BottomNavItem.Calendar.route) {
+                    CalendarScreen()
+                }
                 composable(
                     route = "detail/{id}",
                     arguments = listOf(
@@ -180,7 +184,14 @@ fun App() {
                     val id = backStackEntry.arguments?.getInt("id")
                     id?.let {
                         DetailScreen(navController, id, viewModel) { itemJsonString ->
-                            navController.navigate("update/${URLEncoder.encode(itemJsonString, StandardCharsets.UTF_8.toString())}")
+                            navController.navigate(
+                                "update/${
+                                    URLEncoder.encode(
+                                        itemJsonString,
+                                        StandardCharsets.UTF_8.toString()
+                                    )
+                                }"
+                            )
                         }
                     }
                 }
@@ -188,7 +199,10 @@ fun App() {
                 composable(route = "update/{itemJsonString}") { backStackEntry ->
                     val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
                     itemJsonString?.let {
-                        UpdateScreen(navController, URLDecoder.decode(itemJsonString, StandardCharsets.UTF_8.toString())) { itemEntity ->
+                        UpdateScreen(
+                            navController,
+                            URLDecoder.decode(itemJsonString, StandardCharsets.UTF_8.toString())
+                        ) { itemEntity ->
                             viewModel.updateItem(itemEntity)
                             navController.popBackStack()
                         }

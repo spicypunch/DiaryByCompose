@@ -11,7 +11,10 @@ class RoomRepositoryImpl @Inject constructor(
     private val diaryDao: DiaryDao
 ) : RoomRepository {
     override fun getAllItem(): Flow<List<ItemEntity>> = diaryDao.getAllItem()
+
     override fun getItem(id: Int): Flow<ItemEntity> = diaryDao.getItem(id)
+
+    override fun getLikeItem(): Flow<List<ItemEntity>> = diaryDao.getLikeItem(true)
 
     override suspend fun insertItem(itemEntity: ItemEntity) = withContext(Dispatchers.IO) {
         diaryDao.insertItem(itemEntity)

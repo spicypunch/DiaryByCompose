@@ -11,6 +11,7 @@ import com.jm.diarybycompose.repository.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +34,9 @@ class MainViewModel @Inject constructor(
 
     private var _item = mutableStateOf<ItemEntity?>(null)
     val item: State<ItemEntity?> = _item
+
+    private val _likeItem = mutableStateOf(emptyList<ItemEntity>())
+    val likeItem: State<List<ItemEntity>> = _likeItem
 
     fun insertItem(title: String, content: String, imageUri: Uri?, date: String) {
         viewModelScope.launch {
@@ -75,6 +79,18 @@ class MainViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("GetItemErr", e.toString())
+            }
+        }
+    }
+
+    fun getLikeItem() {
+        viewModelScope.launch {
+            try {
+                roomRepository.getLikeItem().collect() { result ->
+                    _likeItem.value = result
+                }
+            } catch (e: Exception) {
+                Log.e("GetLikeItemErr", e.toString())
             }
         }
     }
