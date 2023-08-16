@@ -9,6 +9,8 @@ interface RoomRepository {
 
     fun getItem(id: Int): Flow<ItemEntity>
 
+    fun getLikeItem(): Flow<List<ItemEntity>>
+
     suspend fun insertItem(itemEntity: ItemEntity)
 
     suspend fun deleteItem(itemEntity: ItemEntity)

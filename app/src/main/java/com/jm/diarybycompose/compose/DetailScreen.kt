@@ -25,15 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.diarybycompose.R
-import com.jm.diarybycompose.MainViewModel
-import com.jm.diarybycompose.data.ItemEntity
 import com.google.gson.Gson
+import com.jm.diarybycompose.MainViewModel
+import com.jm.diarybycompose.R
+import com.jm.diarybycompose.data.ItemEntity
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

@@ -16,6 +16,9 @@ interface DiaryDao {
     @Query("SELECT * FROM ItemEntity WHERE id = :id")
     fun getItem(id: Int): Flow<ItemEntity>
 
+    @Query("SELECT * FROM ItemEntity WHERE `like` = :like")
+    fun getLikeItem(like: Boolean): Flow<List<ItemEntity>>
+
     @Insert
     fun insertItem(item: ItemEntity)
 
