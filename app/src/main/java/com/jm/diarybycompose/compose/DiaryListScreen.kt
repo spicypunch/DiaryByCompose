@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -55,22 +56,22 @@ fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
         columns = GridCells.Fixed(2),
         modifier = Modifier,
     ) {
-        items(diaryLists.size) { count ->
-            GridItem(diaryLists = diaryLists, count = count) { id ->
+        items(diaryLists) { item ->
+            GridItem(item) { id ->
                 navController.navigate("detail/$id")
             }
         }
     }
 }
 
+
 @Composable
 fun GridItem(
-    diaryLists: List<ItemEntity>,
-    count: Int,
+    item: ItemEntity,
     onClicked: (id: Int) -> Unit
 ) {
     Column(
-        modifier = Modifier.clickable { diaryLists[count].id?.let { onClicked(it) } },
+        modifier = Modifier.clickable { item.id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -81,10 +82,10 @@ fun GridItem(
         ) {
             Box() {
                 Image(
-                    painter = rememberImagePainter(data = if (diaryLists[count].imageUri != "null") diaryLists[count].imageUri else R.drawable.round_menu_book_24),
+                    painter = rememberImagePainter(data = if (item.imageUri != "null") item.imageUri else R.drawable.round_menu_book_24),
                     contentDescription = "MyDiaryImage",
                     modifier = Modifier.size(230.dp),
-                    contentScale = if (diaryLists[count].imageUri != "null") ContentScale.Crop else ContentScale.Fit
+                    contentScale = if (item.imageUri != "null") ContentScale.Crop else ContentScale.Fit
                 )
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -93,17 +94,17 @@ fun GridItem(
                     IconButton(onClick = {
                         mainViewModel.updateItem(
                             ItemEntity(
-                                id = diaryLists[count].id,
-                                title = diaryLists[count].title,
-                                content = diaryLists[count].content,
-                                imageUri = diaryLists[count].imageUri,
-                                date = diaryLists[count].date,
-                                like = !diaryLists[count].like
+                                id = item.id,
+                                title = item.title,
+                                content = item.content,
+                                imageUri = item.imageUri,
+                                date = item.date,
+                                like = !item.like
                             )
                         )
                     }) {
                         Icon(
-                            imageVector = if (!diaryLists[count].like) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
+                            imageVector = if (!item.like) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
                             contentDescription = "favorite",
                             tint = Color.Red
                         )
@@ -112,7 +113,7 @@ fun GridItem(
             }
         }
         Text(
-            text = diaryLists[count].title,
+            text = item.title,
             color = Color.Black,
             modifier = Modifier.padding(8.dp),
             textAlign = TextAlign.Center

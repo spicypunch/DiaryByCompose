@@ -122,7 +122,7 @@ fun App() {
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
-//        BottomNavItem.Calendar,
+        BottomNavItem.Calendar,
     )
     Scaffold(
         bottomBar = {
@@ -171,9 +171,9 @@ fun App() {
                         navController.popBackStack()
                     }
                 }
-//                composable(route = BottomNavItem.Calendar.route) {
-//                    CalendarScreen()
-//                }
+                composable(route = BottomNavItem.Calendar.route) {
+                    CalendarScreen()
+                }
                 composable(
                     route = "detail/{id}",
                     arguments = listOf(
