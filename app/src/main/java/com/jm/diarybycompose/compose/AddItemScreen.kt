@@ -73,12 +73,14 @@ fun AddScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "일기 쓰기") },
+                title = { Text(text = "일기 쓰기", modifier = Modifier.padding(start = 8.dp)) },
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "home",
-                        modifier = Modifier.clickable { navController.popBackStack() })
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .clickable { navController.popBackStack() })
                 }
             )
         },

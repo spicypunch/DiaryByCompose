@@ -3,14 +3,20 @@ package com.jm.diarybycompose.compose
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.IconButton
 import androidx.compose.material.TabRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -32,7 +38,7 @@ lateinit var mainViewModel: MainViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
-fun MainScreen(
+fun HomeScreen(
     navController: NavController,
     allItem: List<ItemEntity>,
     viewModel: MainViewModel
@@ -78,7 +84,9 @@ fun MainScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(it)
+        ) {
             TabRow(
                 selectedTabIndex = pagerState.currentPage,
                 backgroundColor = Color.Transparent,
@@ -101,7 +109,7 @@ fun MainScreen(
                 count = pages.size,
                 state = pagerState
             ) { page ->
-                when(page) {
+                when (page) {
                     0 -> DiaryListScreen(allItem, Modifier.fillMaxSize(), navController)
                     1 -> DiaryListScreen(likeItem, Modifier.fillMaxSize(), navController)
                 }
