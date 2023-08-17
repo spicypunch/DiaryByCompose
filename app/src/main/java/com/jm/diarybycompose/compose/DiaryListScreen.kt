@@ -81,7 +81,7 @@ fun GridItem(
         ) {
             Box() {
                 Image(
-                    painter = rememberImagePainter(data = if (diaryLists[count].imageUri != "null") diaryLists[count].imageUri else R.drawable.diary),
+                    painter = rememberImagePainter(data = if (diaryLists[count].imageUri != "null") diaryLists[count].imageUri else R.drawable.round_menu_book_24),
                     contentDescription = "MyDiaryImage",
                     modifier = Modifier.size(230.dp),
                     contentScale = if (diaryLists[count].imageUri != "null") ContentScale.Crop else ContentScale.Fit

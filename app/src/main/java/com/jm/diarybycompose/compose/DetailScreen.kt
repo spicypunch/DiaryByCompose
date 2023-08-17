@@ -75,7 +75,7 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = rememberImagePainter(data = if (itemEntity?.imageUri != "null") itemEntity?.imageUri else R.drawable.diary),
+                    painter = rememberImagePainter(data = if (itemEntity?.imageUri != "null") itemEntity?.imageUri else R.drawable.round_menu_book_24),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

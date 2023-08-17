@@ -43,7 +43,7 @@ import androidx.navigation.navArgument
 import com.jm.diarybycompose.compose.AddScreen
 import com.jm.diarybycompose.compose.CalendarScreen
 import com.jm.diarybycompose.compose.DetailScreen
-import com.jm.diarybycompose.compose.MainScreen
+import com.jm.diarybycompose.compose.HomeScreen
 import com.jm.diarybycompose.compose.UpdateScreen
 import com.jm.diarybycompose.compose.theme.DiaryByComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -122,7 +122,7 @@ fun App() {
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
-        BottomNavItem.Calendar,
+//        BottomNavItem.Calendar,
     )
     Scaffold(
         bottomBar = {
@@ -158,7 +158,7 @@ fun App() {
         Box(modifier = Modifier.padding(it)) {
             NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
                 composable(route = BottomNavItem.Home.route) {
-                    MainScreen(navController, allItem, viewModel)
+                    HomeScreen(navController, allItem, viewModel)
                 }
                 composable(route = BottomNavItem.Add.route) {
                     AddScreen(navController) { title, content, uri ->
@@ -171,9 +171,9 @@ fun App() {
                         navController.popBackStack()
                     }
                 }
-                composable(route = BottomNavItem.Calendar.route) {
-                    CalendarScreen()
-                }
+//                composable(route = BottomNavItem.Calendar.route) {
+//                    CalendarScreen()
+//                }
                 composable(
                     route = "detail/{id}",
                     arguments = listOf(
