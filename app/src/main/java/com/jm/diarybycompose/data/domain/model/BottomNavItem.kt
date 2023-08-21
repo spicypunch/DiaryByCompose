@@ -1,4 +1,4 @@
-package com.jm.diarybycompose
+package com.jm.diarybycompose.data.domain.model
 
 import com.jm.diarybycompose.R.*
 

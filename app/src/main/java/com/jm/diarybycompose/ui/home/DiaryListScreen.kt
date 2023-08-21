@@ -1,4 +1,4 @@
-package com.jm.diarybycompose.compose
+package com.jm.diarybycompose.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.jm.diarybycompose.R
-import com.jm.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.domain.model.ItemEntity
 
 @Composable
 fun DiaryListScreen(

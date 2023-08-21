@@ -1,7 +1,6 @@
-package com.jm.diarybycompose.compose
+package com.jm.diarybycompose.ui.update
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -41,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.jm.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import gun0912.tedimagepicker.builder.TedImagePicker

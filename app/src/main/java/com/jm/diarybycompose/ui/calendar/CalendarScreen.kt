@@ -1,4 +1,4 @@
-package com.jm.diarybycompose.compose
+package com.jm.diarybycompose.ui.calendar
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

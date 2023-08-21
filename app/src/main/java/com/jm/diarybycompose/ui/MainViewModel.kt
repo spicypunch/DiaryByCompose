@@ -1,4 +1,4 @@
-package com.jm.diarybycompose
+package com.jm.diarybycompose.ui
 
 import android.net.Uri
 import android.util.Log
@@ -6,12 +6,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jm.diarybycompose.data.ItemEntity
-import com.jm.diarybycompose.repository.RoomRepositoryImpl
+import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.data.repository.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

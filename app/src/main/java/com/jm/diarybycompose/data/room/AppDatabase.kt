@@ -1,8 +1,8 @@
-package com.jm.diarybycompose.room
+package com.jm.diarybycompose.data.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.jm.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.domain.model.ItemEntity
 
 @Database(entities = [ItemEntity::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {

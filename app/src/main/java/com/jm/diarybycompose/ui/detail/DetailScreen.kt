@@ -1,4 +1,4 @@
-package com.jm.diarybycompose.compose
+package com.jm.diarybycompose.ui.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.gson.Gson
-import com.jm.diarybycompose.MainViewModel
 import com.jm.diarybycompose.R
-import com.jm.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.ui.MainViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

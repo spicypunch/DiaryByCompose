@@ -1,4 +1,4 @@
-package com.jm.diarybycompose.compose.theme
+package com.jm.diarybycompose.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -14,6 +14,12 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.jm.diarybycompose.compose.theme.Pink40
+import com.jm.diarybycompose.compose.theme.Pink80
+import com.jm.diarybycompose.compose.theme.Purple40
+import com.jm.diarybycompose.compose.theme.Purple80
+import com.jm.diarybycompose.compose.theme.PurpleGrey40
+import com.jm.diarybycompose.compose.theme.PurpleGrey80
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,

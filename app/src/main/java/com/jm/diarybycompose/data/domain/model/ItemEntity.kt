@@ -1,6 +1,5 @@
-package com.jm.diarybycompose.data
+package com.jm.diarybycompose.data.domain.model
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package com.jm.diarybycompose
+package com.jm.diarybycompose.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -40,12 +40,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.jm.diarybycompose.compose.AddScreen
-import com.jm.diarybycompose.compose.CalendarScreen
-import com.jm.diarybycompose.compose.DetailScreen
-import com.jm.diarybycompose.compose.HomeScreen
-import com.jm.diarybycompose.compose.UpdateScreen
-import com.jm.diarybycompose.compose.theme.DiaryByComposeTheme
+import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
+import com.jm.diarybycompose.data.domain.model.BottomNavItem
+import com.jm.diarybycompose.ui.add.AddScreen
+import com.jm.diarybycompose.ui.calendar.CalendarScreen
+import com.jm.diarybycompose.ui.detail.DetailScreen
+import com.jm.diarybycompose.ui.home.HomeScreen
+import com.jm.diarybycompose.ui.update.UpdateScreen
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLDecoder
 import java.net.URLEncoder
