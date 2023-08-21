@@ -1,11 +1,11 @@
-package com.jm.diarybycompose.room
+package com.jm.diarybycompose.data.room
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.jm.diarybycompose.data.ItemEntity
+import com.jm.diarybycompose.data.domain.model.ItemEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

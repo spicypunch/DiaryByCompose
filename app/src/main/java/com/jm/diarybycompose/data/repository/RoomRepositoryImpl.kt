@@ -1,7 +1,7 @@
-package com.jm.diarybycompose.repository
+package com.jm.diarybycompose.data.repository
 
-import com.jm.diarybycompose.data.ItemEntity
-import com.jm.diarybycompose.room.DiaryDao
+import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.data.room.DiaryDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

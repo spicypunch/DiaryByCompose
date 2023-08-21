@@ -2,8 +2,8 @@ package com.jm.diarybycompose.di
 
 import android.content.Context
 import androidx.room.Room
-import com.jm.diarybycompose.room.AppDatabase
-import com.jm.diarybycompose.room.DiaryDao
+import com.jm.diarybycompose.data.room.AppDatabase
+import com.jm.diarybycompose.data.room.DiaryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

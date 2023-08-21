@@ -1,14 +1,7 @@
-package com.jm.diarybycompose.compose
+package com.jm.diarybycompose.ui.add
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Application
-import android.content.Intent
 import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
