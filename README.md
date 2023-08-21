@@ -9,3 +9,5 @@ filter - 날짜순, 가나다순 등
 달력 - 달력을 표시하고 내가 글을 쓴 날을 달력에 표시
 <br>
 FCM - n일이 지난 글을 다시 확인해 보세요! 등의 알림 보내기
+
+PlayStore: https://play.google.com/store/apps/details?id=com.jm.diarybycompose&pli=1
