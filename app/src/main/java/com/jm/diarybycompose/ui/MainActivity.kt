@@ -151,7 +151,8 @@ fun App() {
                                 painter = painterResource(id = screen.icon),
                                 contentDescription = screen.title
                             )
-                        })
+                        }
+                    )
                 }
             }
         },

@@ -1,12 +1,16 @@
 package com.jm.diarybycompose.ui.calendar
 
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import com.himanshoe.kalendar.Kalendar
+import com.himanshoe.kalendar.KalendarType
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen() {
-    Button(onClick = { /*TODO*/ }, ) {
-        Text(text = "달력")
+    Kalendar(currentDay = LocalDate(), kalendarType = KalendarType.Oceanic) {
+
     }
 }
