@@ -86,8 +86,16 @@ fun DetailScreen(
                 )
                 itemEntity?.let {
                     Text(text = itemEntity.title, fontSize = 35.sp)
-                    Text(text = itemEntity.date, fontSize = 13.sp, modifier = Modifier.align(Alignment.End))
-                    Text(text = itemEntity.content, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start))
+                    Text(
+                        text = itemEntity.date,
+                        fontSize = 13.sp,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                    Text(
+                        text = itemEntity.content,
+                        fontSize = 20.sp,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
                 }
             }
             Row(
