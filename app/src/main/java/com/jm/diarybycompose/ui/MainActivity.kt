@@ -64,15 +64,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DiaryByComposeTheme {
-                val permissionsList = arrayOf(
+                val permissionsList: Array<String> =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        Manifest.permission.READ_MEDIA_IMAGES
-                        Manifest.permission.CAMERA
+                        arrayOf(
+                            Manifest.permission.READ_MEDIA_IMAGES,
+                            Manifest.permission.CAMERA
+                        )
                     } else {
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                        Manifest.permission.CAMERA
+                        arrayOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                        )
                     }
-                )
                 var grantedList by remember { mutableStateOf(mutableListOf(false)) }
 
                 val launcher =
