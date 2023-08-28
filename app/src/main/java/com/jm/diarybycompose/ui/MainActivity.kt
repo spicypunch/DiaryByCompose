@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -107,18 +108,17 @@ fun DemandPermissionScreen(onClick: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun App() {
     val navController = rememberNavController()
     val currentTime: Long = System.currentTimeMillis()
-    val dateFormat = SimpleDateFormat("M월 d일 h시 m분", Locale.KOREA)
+    val dateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.KOREA)
     val viewModel = viewModel<MainViewModel>()
 
     viewModel.getAllItem()
 
-    val allItem = viewModel.allItem.value
+    val allItems = viewModel.allItem.value
 
     val navItems = listOf(
         BottomNavItem.Home,
@@ -160,7 +160,7 @@ fun App() {
         Box(modifier = Modifier.padding(it)) {
             NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
                 composable(route = BottomNavItem.Home.route) {
-                    HomeScreen(navController, allItem, viewModel)
+                    HomeScreen(navController, allItems, viewModel)
                 }
                 composable(route = BottomNavItem.Add.route) {
                     AddScreen(navController) { title, content, uri ->
@@ -174,14 +174,14 @@ fun App() {
                     }
                 }
                 composable(route = BottomNavItem.Calendar.route) {
-                    CalendarScreen()
+                    CalendarScreen(allItems) { dateMillis ->
+
+                    }
                 }
                 composable(
-                    route = "detail/{id}",
-                    arguments = listOf(
-                        navArgument("id") {
-                            type = NavType.IntType
-                        })
+                    route = "detail/{id}", arguments = listOf(navArgument("id") {
+                        type = NavType.IntType
+                    })
                 ) { backStackEntry ->
                     val id = backStackEntry.arguments?.getInt("id")
                     id?.let {
