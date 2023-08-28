@@ -57,7 +57,7 @@ lateinit var mainViewModel: MainViewModel
 @Composable
 fun HomeScreen(
     navController: NavController,
-    allItem: List<ItemEntity>,
+    allItems: List<ItemEntity>,
     viewModel: MainViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -172,7 +172,7 @@ fun HomeScreen(
                         state = pagerState
                     ) { page ->
                         when (page) {
-                            0 -> DiaryListScreen(allItem, Modifier.fillMaxSize(), navController)
+                            0 -> DiaryListScreen(allItems, Modifier.fillMaxSize(), navController)
                             1 -> DiaryListScreen(likeItem, Modifier.fillMaxSize(), navController)
                         }
                     }
