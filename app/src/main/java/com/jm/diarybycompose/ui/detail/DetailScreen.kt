@@ -21,6 +21,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import com.google.gson.Gson
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.ui.MainViewModel
+import com.jm.diarybycompose.ui.dialog.RemoveDialog
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +51,7 @@ fun DetailScreen(
     val itemEntity: ItemEntity? = viewModel.item.value
     val gson = Gson()
     val itemJsonString = gson.toJson(itemEntity)
-
+    val openDialog = remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -107,7 +109,6 @@ fun DetailScreen(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-
                         onClicked(itemJsonString)
                     }
                 ) {
@@ -116,14 +117,22 @@ fun DetailScreen(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        if (itemEntity != null) {
-                            viewModel.deleteItem(itemEntity)
-                        }
-                        navController.popBackStack()
+                        openDialog.value = true
                     }) {
                     Text(text = "삭제하기")
                 }
             }
+        }
+    }
+    if (openDialog.value) {
+        RemoveDialog {
+            if (it) {
+                if (itemEntity != null) {
+                    viewModel.deleteItem(itemEntity)
+                }
+                navController.popBackStack()
+            }
+            openDialog.value = false
         }
     }
 }
