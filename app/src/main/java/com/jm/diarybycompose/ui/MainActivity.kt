@@ -65,8 +65,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             DiaryByComposeTheme {
                 val permissionsList = arrayOf(
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    Manifest.permission.CAMERA,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Manifest.permission.READ_MEDIA_IMAGES
+                        Manifest.permission.CAMERA
+                    } else {
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                        Manifest.permission.CAMERA
+                    }
                 )
                 var grantedList by remember { mutableStateOf(mutableListOf(false)) }
 
