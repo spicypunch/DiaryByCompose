@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DiaryDao {
-    @Query("SELECT * FROM ItemEntity")
+    @Query("SELECT * FROM ItemEntity ORDER BY date")
     fun getAllItem(): Flow<List<ItemEntity>>
 
     @Query("SELECT * FROM ItemEntity WHERE id = :id")

@@ -23,15 +23,15 @@ fun CalendarScreen(
     allItems: List<ItemEntity>,
     onClicked: (Long) -> Unit
     ) {
-    val list = ArrayList<Long>()
-    allItems.forEach { item ->
-        val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일")
-
-        val date = LocalDate.parse(item.date, formatter)
-
-        val dateMillis = date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-        list.add(dateMillis)
-    }
+//    val list = ArrayList<Long>()
+//    allItems.forEach { item ->
+//        val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일")
+//
+//        val date = LocalDate.parse(item.date, formatter)
+//
+//        val dateMillis = date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+//        list.add(dateMillis)
+//    }
     Column(
         modifier = Modifier
             .fillMaxSize()

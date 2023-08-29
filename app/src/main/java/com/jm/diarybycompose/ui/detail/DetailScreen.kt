@@ -59,8 +59,10 @@ fun DetailScreen(
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "home",
-                        modifier = Modifier.clickable { navController.popBackStack() })
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .clickable { navController.popBackStack() })
                 }
             )
         },
