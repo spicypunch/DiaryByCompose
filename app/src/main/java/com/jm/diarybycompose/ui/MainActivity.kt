@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -41,12 +39,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
 import com.jm.diarybycompose.data.domain.model.BottomNavItem
 import com.jm.diarybycompose.ui.add.AddScreen
+import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
 import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
+import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
 import com.jm.diarybycompose.ui.update.UpdateScreen
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLDecoder
@@ -183,7 +182,7 @@ fun App() {
                 }
                 composable(route = BottomNavItem.Calendar.route) {
                     CalendarScreen(allItems) { dateMillis ->
-
+                        navController.navigate("date/$dateMillis")
                     }
                 }
                 composable(
@@ -202,6 +201,26 @@ fun App() {
                                     )
                                 }"
                             )
+                        }
+                    }
+                }
+
+                composable(
+                    route = "date/{dateMillis}",
+                    arguments = listOf(navArgument("dateMillis") {
+                        type = NavType.LongType
+                    })
+                ) { backStackEntry ->
+                    val dateMillis = backStackEntry.arguments?.getLong("dateMillis")
+                    dateMillis?.let {
+                        AddSpecificDateScreen(navController, dateMillis) { title, content, uri ->
+                            viewModel.insertItem(
+                                title = title,
+                                content = content,
+                                imageUri = uri,
+                                date = dateFormat.format(Date(dateMillis))
+                            )
+                            navController.popBackStack()
                         }
                     }
                 }

@@ -1,6 +1,7 @@
-package com.jm.diarybycompose.ui.update
+package com.jm.diarybycompose.ui.add
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,54 +38,53 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.jm.diarybycompose.data.domain.model.ItemEntity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateScreen(
+fun AddSpecificDateScreen(
     navController: NavController,
-    itemJsonString: String,
-    onClicked: (ItemEntity) -> Unit
+    dateMillis: Long,
+    onClicked: (String, String, Uri?) -> Unit
 ) {
-    val gson = Gson()
-    val itemType = object : TypeToken<ItemEntity>() {}.type
-    val itemEntity: ItemEntity = gson.fromJson(itemJsonString, itemType)
-
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val (title, setTitle) = rememberSaveable {
-        mutableStateOf(itemEntity.title)
+        mutableStateOf("")
     }
     val (content, setContent) = rememberSaveable {
-        mutableStateOf(itemEntity.content)
+        mutableStateOf("")
     }
     var imageUri by remember {
-        mutableStateOf(itemEntity.imageUri?.toUri())
+        mutableStateOf<Uri?>(null)
     }
     val context = LocalContext.current
 
+    val dateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.KOREA)
+    val date = dateFormat.format(Date(dateMillis))
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        },
         topBar = {
             TopAppBar(
-                title = { Text(text = "일기 수정") },
+                title = { Text(text = date, modifier = Modifier.padding(start = 8.dp)) },
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
-                        modifier = Modifier.clickable { navController.popBackStack() })
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .clickable { navController.popBackStack() })
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) {
         Box(
@@ -133,7 +133,6 @@ fun UpdateScreen(
                         contentScale = ContentScale.Crop
                     )
                 }
-
             }
             Button(
                 modifier = Modifier
@@ -142,22 +141,13 @@ fun UpdateScreen(
                     .padding(top = 16.dp),
                 onClick = {
                     if (title.isNotEmpty() && content.isNotEmpty()) {
-                        onClicked(
-                            ItemEntity(
-                                id = itemEntity.id,
-                                imageUri = imageUri.toString(),
-                                title = title,
-                                content = content,
-                                date = itemEntity.date,
-                                like = itemEntity.like
-                            )
-                        )
+                        onClicked(title, content, imageUri)
                     } else {
-                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
+                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요.") }
                     }
                 }
             ) {
-                Text(text = "수정")
+                Text(text = "등록")
             }
         }
     }
