@@ -31,10 +31,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.ui.MainViewModel
 
 @Composable
 fun DiaryListScreen(
     list: List<ItemEntity>,
+    viewModel: MainViewModel,
     modifier: Modifier,
     navController: NavController,
 ) {
@@ -45,19 +47,19 @@ fun DiaryListScreen(
             modifier = modifier,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            MyDiaryList(list, navController)
+            MyDiaryList(list, viewModel, navController)
         }
     }
 }
 
 @Composable
-fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
+fun MyDiaryList(diaryLists: List<ItemEntity>, viewModel: MainViewModel, navController: NavController) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier,
     ) {
         items(diaryLists) { item ->
-            GridItem(item) { id ->
+            GridItem(item, viewModel) { id ->
                 navController.navigate("detail/$id")
             }
         }
@@ -68,6 +70,7 @@ fun MyDiaryList(diaryLists: List<ItemEntity>, navController: NavController) {
 @Composable
 fun GridItem(
     item: ItemEntity,
+    viewModel: MainViewModel,
     onClicked: (id: Int) -> Unit
 ) {
     Column(
@@ -92,7 +95,7 @@ fun GridItem(
                     contentAlignment = Alignment.TopEnd
                 ) {
                     IconButton(onClick = {
-                        mainViewModel.updateItem(
+                        viewModel.updateItem(
                             ItemEntity(
                                 id = item.id,
                                 title = item.title,
