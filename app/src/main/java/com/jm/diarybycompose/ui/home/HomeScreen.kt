@@ -50,8 +50,6 @@ import com.jm.diarybycompose.data.domain.model.MenuItem
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-lateinit var mainViewModel: MainViewModel
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
@@ -67,13 +65,11 @@ fun HomeScreen(
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val items = listOf(MenuItem.Notification, MenuItem.Setting)
 
-    mainViewModel = viewModel
-    mainViewModel.getLikeItem()
 
-    val likeItem = mainViewModel.likeItem.value
+    val likeItem = viewModel.likeItem.value
 
     LaunchedEffect(Unit) {
-        mainViewModel.insertResult.collectLatest {
+        viewModel.insertResult.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar("일기가 등록되었습니다.")
             } else {
@@ -83,7 +79,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(Unit) {
-        mainViewModel.deleteResult.collectLatest {
+        viewModel.deleteResult.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar("일기가 삭제되었습니다.")
             } else {
@@ -93,7 +89,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(Unit) {
-        mainViewModel.getItem.collectLatest {
+        viewModel.getItem.collectLatest {
             if (!it) {
                 snackbarHostState.showSnackbar("일기를 가져오는데 실패하였습니다.")
             }
@@ -172,8 +168,8 @@ fun HomeScreen(
                         state = pagerState
                     ) { page ->
                         when (page) {
-                            0 -> DiaryListScreen(allItems, Modifier.fillMaxSize(), navController)
-                            1 -> DiaryListScreen(likeItem, Modifier.fillMaxSize(), navController)
+                            0 -> DiaryListScreen(allItems, viewModel, Modifier.fillMaxSize(), navController)
+                            1 -> DiaryListScreen(likeItem, viewModel, Modifier.fillMaxSize(), navController)
                         }
                     }
                 }

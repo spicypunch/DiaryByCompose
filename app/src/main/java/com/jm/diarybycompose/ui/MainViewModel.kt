@@ -37,6 +37,9 @@ class MainViewModel @Inject constructor(
     private val _likeItem = mutableStateOf(emptyList<ItemEntity>())
     val likeItem: State<List<ItemEntity>> = _likeItem
 
+    private val _datePicker = mutableStateOf(false)
+    val datePicker: State<Boolean> = _datePicker
+
     fun insertItem(title: String, content: String, imageUri: Uri?, date: String) {
         viewModelScope.launch {
             try {
@@ -126,5 +129,9 @@ class MainViewModel @Inject constructor(
                 Log.e("UpdateItemErr", e.toString())
             }
         }
+    }
+
+    fun clickDatePicker(click: Boolean) {
+        _datePicker.value = click
     }
 }
