@@ -76,9 +76,6 @@ fun HomeScreen(
                 snackbarHostState.showSnackbar("등록에 실패하였습니다.")
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.deleteResult.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar("일기가 삭제되었습니다.")
@@ -86,9 +83,6 @@ fun HomeScreen(
                 snackbarHostState.showSnackbar("삭제에 실패하였습니다.")
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.getItem.collectLatest {
             if (!it) {
                 snackbarHostState.showSnackbar("일기를 가져오는데 실패하였습니다.")
