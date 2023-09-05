@@ -4,11 +4,14 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun RemoveDialog(onClicked: (Boolean) -> Unit) {
     AlertDialog(
-        onDismissRequest = {},
+        onDismissRequest = { onClicked(false) },
+        title = { Text(text = "삭제하시겠습니까?") },
+        text = { Text(text = "기록하신 일기가 삭제됩니다.") },
         confirmButton = {
             TextButton(onClick = { onClicked(true) }) {
                 Text(text = "확인")
@@ -19,7 +22,9 @@ fun RemoveDialog(onClicked: (Boolean) -> Unit) {
                 Text(text = "취소")
             }
         },
-        title = { Text(text = "삭제하시겠습니까?") },
-        text = { Text(text = "기록하신 일기가 삭제됩니다.") }
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        )
     )
 }
