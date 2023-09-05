@@ -6,14 +6,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.IconButton
-import androidx.compose.material.TabRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -23,7 +22,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -36,13 +35,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.data.domain.model.MenuItem
@@ -140,16 +137,7 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier.padding(it)
                 ) {
-                    TabRow(
-                        selectedTabIndex = pagerState.currentPage,
-                        backgroundColor = Color.Transparent,
-                        indicator = { tabPositions ->
-                            SecondaryIndicator(
-                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                                color = Color.Gray
-                            )
-                        }
-                    ) {
+                    TabRow(selectedTabIndex = pagerState.currentPage) {
                         pages.forEachIndexed { index, item ->
                             Tab(
                                 selected = pagerState.currentPage == index,
