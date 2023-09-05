@@ -28,7 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.ui.MainViewModel
@@ -53,7 +53,11 @@ fun DiaryListScreen(
 }
 
 @Composable
-fun MyDiaryList(diaryLists: List<ItemEntity>, viewModel: MainViewModel, navController: NavController) {
+fun MyDiaryList(
+    diaryLists: List<ItemEntity>,
+    viewModel: MainViewModel,
+    navController: NavController
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier,
@@ -85,7 +89,7 @@ fun GridItem(
         ) {
             Box() {
                 Image(
-                    painter = rememberImagePainter(data = if (item.imageUri != "null") item.imageUri else R.drawable.round_menu_book_24),
+                    painter = rememberAsyncImagePainter(model = if (item.imageUri != "null") item.imageUri else R.drawable.round_menu_book_24),
                     contentDescription = "MyDiaryImage",
                     modifier = Modifier.size(230.dp),
                     contentScale = if (item.imageUri != "null") ContentScale.Crop else ContentScale.Fit

@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Surface
 import androidx.compose.material.TabRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -23,10 +21,12 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,14 +39,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.jm.diarybycompose.ui.MainViewModel
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.data.domain.model.MenuItem
+import com.jm.diarybycompose.ui.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -65,6 +65,7 @@ fun HomeScreen(
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val items = listOf(MenuItem.Notification, MenuItem.Setting)
 
+    viewModel.getLikeItem()
 
     val likeItem = viewModel.likeItem.value
 
@@ -109,7 +110,7 @@ fun HomeScreen(
                             },
                             icon = {
                                 Icon(
-                                    painter = rememberImagePainter(data = if (index == selectedItemIndex) menuItem.selectedIcon else menuItem.unselectedIcon),
+                                    painter = rememberAsyncImagePainter(model = if (index == selectedItemIndex) menuItem.selectedIcon else menuItem.unselectedIcon),
                                     contentDescription = menuItem.title
                                 )
                             },
@@ -143,7 +144,7 @@ fun HomeScreen(
                         selectedTabIndex = pagerState.currentPage,
                         backgroundColor = Color.Transparent,
                         indicator = { tabPositions ->
-                            TabRowDefaults.Indicator(
+                            SecondaryIndicator(
                                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
                                 color = Color.Gray
                             )
@@ -162,8 +163,19 @@ fun HomeScreen(
                         state = pagerState
                     ) { page ->
                         when (page) {
-                            0 -> DiaryListScreen(allItems, viewModel, Modifier.fillMaxSize(), navController)
-                            1 -> DiaryListScreen(likeItem, viewModel, Modifier.fillMaxSize(), navController)
+                            0 -> DiaryListScreen(
+                                allItems,
+                                viewModel,
+                                Modifier.fillMaxSize(),
+                                navController
+                            )
+
+                            1 -> DiaryListScreen(
+                                likeItem,
+                                viewModel,
+                                Modifier.fillMaxSize(),
+                                navController
+                            )
                         }
                     }
                 }
