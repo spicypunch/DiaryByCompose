@@ -20,6 +20,7 @@ import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.ui.MainViewModel
 import java.time.DayOfWeek
 import java.time.Instant
+import java.time.Month
 import java.time.ZoneId
 import java.util.Calendar
 import java.util.TimeZone
@@ -70,10 +71,15 @@ fun CalendarScreen(
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val dayOfWeek = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.of("Asia/Seoul"))
-                        .toLocalDate().plusDays(1).dayOfWeek
-                    Log.e("test", dayOfWeek.toString())
-                    dayOfWeek != DayOfWeek.SUNDAY && dayOfWeek != DayOfWeek.SATURDAY
+//                    val dayOfWeek = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.of("Asia/Seoul"))
+//                        .toLocalDate().dayOfWeek
+//                    dayOfWeek != DayOfWeek.SUNDAY && dayOfWeek != DayOfWeek.SATURDAY
+                    val dayOfMonth =
+                        Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneId.of("Asia/Seoul"))
+                            .toLocalDate().monthValue
+                    val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
+                    val laterMonthsList = getLaterMonths(currentMonth)
+                    laterMonthsList.all { dayOfMonth != it }
                 } else {
                     val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
                     calendar.timeInMillis = utcTimeMillis
@@ -92,6 +98,9 @@ fun CalendarScreen(
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         DatePicker(state = datePickerState)
-
     }
+}
+
+private fun getLaterMonths(currentMonth: Int): List<Int> {
+    return (currentMonth + 1..12).toList()
 }
