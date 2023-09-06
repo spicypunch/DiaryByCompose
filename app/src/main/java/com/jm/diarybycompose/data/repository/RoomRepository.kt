@@ -18,4 +18,6 @@ interface RoomRepository {
     suspend fun deleteAllItem()
 
     suspend fun updateItem(itemEntity: ItemEntity)
+
+    fun searchItem(search: String): Flow<List<ItemEntity>>
 }

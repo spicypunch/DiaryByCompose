@@ -31,4 +31,6 @@ interface DiaryDao {
     @Update
     fun updateItem(item: ItemEntity)
 
+    @Query("SELECT * FROM ItemEntity WHERE title LIKE '%' || :search || '%'")
+    fun searchItem(search: String): Flow<List<ItemEntity>>
 }

@@ -31,4 +31,6 @@ class RoomRepositoryImpl @Inject constructor(
     override suspend fun updateItem(itemEntity: ItemEntity) = withContext(Dispatchers.IO){
         diaryDao.updateItem(itemEntity)
     }
+
+    override fun searchItem(search: String): Flow<List<ItemEntity>> = diaryDao.searchItem(search)
 }

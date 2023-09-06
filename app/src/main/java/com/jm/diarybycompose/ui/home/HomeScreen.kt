@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +45,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.data.domain.model.MenuItem
 import com.jm.diarybycompose.ui.MainViewModel
+import com.jm.diarybycompose.ui.search.SearchScreen
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -53,7 +55,8 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController,
     allItems: List<ItemEntity>,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onClicked: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val pages = listOf("일기", "❤️")
@@ -129,6 +132,10 @@ fun HomeScreen(
                             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                                 Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu")
                             }
+                        }, actions = {
+                            IconButton(onClick = { onClicked() }) {
+                                Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                            }
                         }
                     )
                 },
@@ -154,14 +161,12 @@ fun HomeScreen(
                             0 -> DiaryListScreen(
                                 allItems,
                                 viewModel,
-                                Modifier.fillMaxSize(),
                                 navController
                             )
 
                             1 -> DiaryListScreen(
                                 likeItem,
                                 viewModel,
-                                Modifier.fillMaxSize(),
                                 navController
                             )
                         }

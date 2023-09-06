@@ -11,6 +11,7 @@ import com.jm.diarybycompose.data.repository.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,6 +40,9 @@ class MainViewModel @Inject constructor(
 
     private val _datePicker = mutableStateOf(false)
     val datePicker: State<Boolean> = _datePicker
+
+    private val _searchResult = mutableStateOf(emptyList<ItemEntity>())
+    val searchResult: State<List<ItemEntity>> = _searchResult
 
     fun insertItem(title: String, content: String, imageUri: Uri?, date: String) {
         viewModelScope.launch {
@@ -131,6 +135,17 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun searchItem(search: String) {
+        viewModelScope.launch {
+            try {
+                roomRepository.searchItem(search).collect() { result ->
+                    _searchResult.value = result
+                }
+            } catch (e: Exception) {
+                Log.e("SearchItemErr", e.toString())
+            }
+        }
+    }
     fun clickDatePicker(click: Boolean) {
         _datePicker.value = click
     }

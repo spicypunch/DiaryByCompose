@@ -37,14 +37,12 @@ import com.jm.diarybycompose.ui.MainViewModel
 fun DiaryListScreen(
     list: List<ItemEntity>,
     viewModel: MainViewModel,
-    modifier: Modifier,
     navController: NavController,
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
-            modifier = modifier,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             MyDiaryList(list, viewModel, navController)
