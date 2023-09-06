@@ -1,4 +1,17 @@
 # DiaryByCompose
+-------------------
+## 사용한 기술
+- Jetpack
+  - Compose
+  - Room
+  - Navigation
+  - ViewPager
+- Hilt
+- Coroutine
+- Material3
+- Coil
+- TedImagePicker
+- Gson
 
 #### 구현해야 할 것들
 
