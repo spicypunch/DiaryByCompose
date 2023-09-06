@@ -86,7 +86,6 @@ fun AddScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-
             Column(
             ) {
                 OutlinedTextField(

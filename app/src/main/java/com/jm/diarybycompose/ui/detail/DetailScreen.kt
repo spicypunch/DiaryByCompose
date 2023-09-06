@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.google.gson.Gson
 import com.jm.diarybycompose.R
@@ -81,7 +82,7 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = rememberImagePainter(data = if (itemEntity?.imageUri != "null") itemEntity?.imageUri else R.drawable.round_menu_book_24),
+                    painter = rememberAsyncImagePainter(model = if (itemEntity?.imageUri != "null") itemEntity?.imageUri else R.drawable.round_menu_book_24),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

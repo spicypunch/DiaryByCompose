@@ -46,6 +46,7 @@ import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
 import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
+import com.jm.diarybycompose.ui.search.SearchScreen
 import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
 import com.jm.diarybycompose.ui.update.UpdateScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -169,7 +170,9 @@ fun App() {
         Box(modifier = Modifier.padding(it)) {
             NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
                 composable(route = BottomNavItem.Home.route) {
-                    HomeScreen(navController, allItems, viewModel)
+                    HomeScreen(navController, allItems, viewModel) {
+                        navController.navigate("search")
+                    }
                 }
                 composable(route = BottomNavItem.Add.route) {
                     AddScreen(navController) { title, content, uri ->
@@ -238,6 +241,10 @@ fun App() {
                             navController.popBackStack()
                         }
                     }
+                }
+
+                composable(route = "search") {
+                    SearchScreen(navController, viewModel)
                 }
             }
         }
