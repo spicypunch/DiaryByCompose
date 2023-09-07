@@ -45,7 +45,6 @@ import com.google.accompanist.pager.rememberPagerState
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.data.domain.model.MenuItem
 import com.jm.diarybycompose.ui.MainViewModel
-import com.jm.diarybycompose.ui.search.SearchScreen
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -134,7 +133,10 @@ fun HomeScreen(
                             }
                         }, actions = {
                             IconButton(onClick = { onClicked() }) {
-                                Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Search"
+                                )
                             }
                         }
                     )
