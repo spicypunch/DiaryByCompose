@@ -9,5 +9,9 @@ sealed class BottomNavItem(
 ) {
     object Home : BottomNavItem(route = "home", title = "Home", icon = drawable.baseline_home_24)
     object Add : BottomNavItem(route = "add", title = "Add", icon = drawable.baseline_add_box_24)
-    object Calendar : BottomNavItem(route = "calendar", title = "Calendar", icon = drawable.baseline_calendar_month_24)
+    object Calendar : BottomNavItem(
+        route = "calendar",
+        title = "Calendar",
+        icon = drawable.baseline_calendar_month_24
+    )
 }

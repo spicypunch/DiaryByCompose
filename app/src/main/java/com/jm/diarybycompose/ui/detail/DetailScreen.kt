@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.google.gson.Gson
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity

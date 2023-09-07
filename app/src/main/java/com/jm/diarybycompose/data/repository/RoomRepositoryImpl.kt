@@ -28,7 +28,7 @@ class RoomRepositoryImpl @Inject constructor(
         diaryDao.deleteAllItem()
     }
 
-    override suspend fun updateItem(itemEntity: ItemEntity) = withContext(Dispatchers.IO){
+    override suspend fun updateItem(itemEntity: ItemEntity) = withContext(Dispatchers.IO) {
         diaryDao.updateItem(itemEntity)
     }
 
