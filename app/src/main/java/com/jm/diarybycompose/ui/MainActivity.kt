@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -45,6 +46,7 @@ import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
 import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
+import com.jm.diarybycompose.ui.navigation.NavigationController
 import com.jm.diarybycompose.ui.search.SearchScreen
 import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
 import com.jm.diarybycompose.ui.update.UpdateScreen
@@ -120,14 +122,6 @@ fun DemandPermissionScreen(onClick: () -> Unit) {
 @Composable
 fun App() {
     val navController = rememberNavController()
-    val currentTime: Long = System.currentTimeMillis()
-    val dateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.KOREA)
-    val viewModel = viewModel<MainViewModel>()
-
-    viewModel.getAllItem()
-
-    val allItems = viewModel.allItem.value
-
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
@@ -165,86 +159,6 @@ fun App() {
             }
         },
     ) {
-        Box(modifier = Modifier.padding(it)) {
-            NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
-                composable(route = BottomNavItem.Home.route) {
-                    HomeScreen(navController, allItems, viewModel) {
-                        navController.navigate("search")
-                    }
-                }
-                composable(route = BottomNavItem.Add.route) {
-                    AddScreen(navController) { title, content, uri ->
-                        viewModel.insertItem(
-                            title = title,
-                            content = content,
-                            imageUri = uri,
-                            date = dateFormat.format(Date(currentTime))
-                        )
-                        navController.popBackStack()
-                    }
-                }
-                composable(route = BottomNavItem.Calendar.route) {
-                    CalendarScreen(allItems, viewModel) { dateMillis ->
-                        navController.navigate("date/$dateMillis")
-                    }
-                }
-                composable(
-                    route = "detail/{id}", arguments = listOf(navArgument("id") {
-                        type = NavType.IntType
-                    })
-                ) { backStackEntry ->
-                    val id = backStackEntry.arguments?.getInt("id")
-                    id?.let {
-                        DetailScreen(navController, id, viewModel) { itemJsonString ->
-                            navController.navigate(
-                                "update/${
-                                    URLEncoder.encode(
-                                        itemJsonString,
-                                        StandardCharsets.UTF_8.toString()
-                                    )
-                                }"
-                            )
-                        }
-                    }
-                }
-
-                composable(
-                    route = "date/{dateMillis}",
-                    arguments = listOf(navArgument("dateMillis") {
-                        type = NavType.LongType
-                    })
-                ) { backStackEntry ->
-                    val dateMillis = backStackEntry.arguments?.getLong("dateMillis")
-                    dateMillis?.let {
-                        AddSpecificDateScreen(navController, dateMillis) { title, content, uri ->
-                            viewModel.insertItem(
-                                title = title,
-                                content = content,
-                                imageUri = uri,
-                                date = dateFormat.format(Date(dateMillis))
-                            )
-                            navController.popBackStack()
-                        }
-                    }
-                }
-
-                composable(route = "update/{itemJsonString}") { backStackEntry ->
-                    val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
-                    itemJsonString?.let {
-                        UpdateScreen(
-                            navController,
-                            URLDecoder.decode(itemJsonString, StandardCharsets.UTF_8.toString())
-                        ) { itemEntity ->
-                            viewModel.updateItem(itemEntity)
-                            navController.popBackStack()
-                        }
-                    }
-                }
-
-                composable(route = "search") {
-                    SearchScreen(navController, viewModel)
-                }
-            }
-        }
+        NavigationController(navController, it)
     }
 }

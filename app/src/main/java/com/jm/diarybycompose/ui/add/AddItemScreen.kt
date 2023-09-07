@@ -39,7 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
 
@@ -121,7 +121,7 @@ fun AddScreen(
                             .padding(start = 8.dp)
                             .aspectRatio(1f)
                             .clip(RectangleShape),
-                        painter = rememberImagePainter(data = imageUri),
+                        painter = rememberAsyncImagePainter(model = imageUri),
                         contentDescription = null,
                         contentScale = ContentScale.Crop
                     )
