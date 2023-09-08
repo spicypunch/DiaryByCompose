@@ -1,11 +1,11 @@
 package com.jm.diarybycompose.ui.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -20,7 +20,6 @@ import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
 import com.jm.diarybycompose.ui.search.SearchScreen
-import com.jm.diarybycompose.ui.splash.SplashScreen
 import com.jm.diarybycompose.ui.update.UpdateScreen
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -48,20 +47,32 @@ fun NavigationController(
 //                SplashScreen(navController)
 //            }
             composable(route = BottomNavItem.Home.route) {
-                HomeScreen(navController, allItems, viewModel) {
-                    navController.navigate("search")
-                }
+                HomeScreen(
+                    allItems,
+                    viewModel,
+                    callNavController = { id ->
+                        navController.navigate("detail/$id")
+                    },
+                    onClicked = {
+                        navController.navigate("search")
+                    }
+                )
             }
             composable(route = BottomNavItem.Add.route) {
-                AddScreen(navController) { title, content, uri ->
-                    viewModel.insertItem(
-                        title = title,
-                        content = content,
-                        imageUri = uri,
-                        date = dateFormat.format(Date(currentTime))
-                    )
-                    navController.popBackStack()
-                }
+                AddScreen(
+                    callNavController = {
+                        navController.popBackStack()
+                    },
+                    onClicked = { title, content, uri ->
+                        viewModel.insertItem(
+                            title = title,
+                            content = content,
+                            imageUri = uri,
+                            date = dateFormat.format(Date(currentTime))
+                        )
+                        navController.popBackStack()
+                    }
+                )
             }
             composable(route = BottomNavItem.Calendar.route) {
                 CalendarScreen(allItems, viewModel) { dateMillis ->
@@ -75,16 +86,23 @@ fun NavigationController(
             ) { backStackEntry ->
                 val id = backStackEntry.arguments?.getInt("id")
                 id?.let {
-                    DetailScreen(navController, id, viewModel) { itemJsonString ->
-                        navController.navigate(
-                            "update/${
-                                URLEncoder.encode(
-                                    itemJsonString,
-                                    StandardCharsets.UTF_8.toString()
-                                )
-                            }"
-                        )
-                    }
+                    DetailScreen(
+                        id,
+                        viewModel,
+                        callNavController = {
+                            navController.popBackStack()
+                        },
+                        onClicked = { itemJsonString ->
+                            navController.navigate(
+                                "update/${
+                                    URLEncoder.encode(
+                                        itemJsonString,
+                                        StandardCharsets.UTF_8.toString()
+                                    )
+                                }"
+                            )
+                        }
+                    )
                 }
             }
 
@@ -96,15 +114,21 @@ fun NavigationController(
             ) { backStackEntry ->
                 val dateMillis = backStackEntry.arguments?.getLong("dateMillis")
                 dateMillis?.let {
-                    AddSpecificDateScreen(navController, dateMillis) { title, content, uri ->
-                        viewModel.insertItem(
-                            title = title,
-                            content = content,
-                            imageUri = uri,
-                            date = dateFormat.format(Date(dateMillis))
-                        )
-                        navController.popBackStack()
-                    }
+                    AddSpecificDateScreen(
+                        dateMillis,
+                        callNavController = {
+                            navController.popBackStack()
+                        },
+                        onClicked = { title, content, uri ->
+                            viewModel.insertItem(
+                                title = title,
+                                content = content,
+                                imageUri = uri,
+                                date = dateFormat.format(Date(dateMillis))
+                            )
+                            navController.popBackStack()
+                        }
+                    )
                 }
             }
 
@@ -112,17 +136,22 @@ fun NavigationController(
                 val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
                 itemJsonString?.let {
                     UpdateScreen(
-                        navController,
-                        URLDecoder.decode(itemJsonString, StandardCharsets.UTF_8.toString())
-                    ) { itemEntity ->
-                        viewModel.updateItem(itemEntity)
-                        navController.popBackStack()
-                    }
+                        URLDecoder.decode(itemJsonString, StandardCharsets.UTF_8.toString()),
+                        callNavController = {
+                            navController.popBackStack()
+                        },
+                        onClicked = { itemEntity ->
+                            viewModel.updateItem(itemEntity)
+                            navController.popBackStack()
+                        }
+                    )
                 }
             }
 
             composable(route = "search") {
-                SearchScreen(navController, viewModel)
+                SearchScreen(viewModel) {
+                    navController.navigate("detail/$id")
+                }
             }
         }
     }

@@ -38,7 +38,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
@@ -50,8 +49,8 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddSpecificDateScreen(
-    navController: NavController,
     dateMillis: Long,
+    callNavController: () -> Unit,
     onClicked: (String, String, Uri?) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -79,7 +78,7 @@ fun AddSpecificDateScreen(
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable { navController.popBackStack() })
+                            .clickable { callNavController() })
                 }
             )
         },

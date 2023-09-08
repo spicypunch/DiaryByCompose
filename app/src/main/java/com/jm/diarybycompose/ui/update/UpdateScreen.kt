@@ -38,11 +38,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.jm.diarybycompose.data.domain.model.ItemEntity
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
 
@@ -50,8 +49,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateScreen(
-    navController: NavController,
     itemJsonString: String,
+    callNavController: () -> Unit,
     onClicked: (ItemEntity) -> Unit
 ) {
     val gson = Gson()
@@ -82,7 +81,9 @@ fun UpdateScreen(
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
-                        modifier = Modifier.clickable { navController.popBackStack() })
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .clickable { callNavController() })
                 }
             )
         }

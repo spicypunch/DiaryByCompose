@@ -37,7 +37,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -52,9 +51,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
     allItems: List<ItemEntity>,
     viewModel: MainViewModel,
+    callNavController: (Int) -> Unit,
     onClicked: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -163,13 +162,13 @@ fun HomeScreen(
                             0 -> DiaryListScreen(
                                 allItems,
                                 viewModel,
-                                navController
+                                callNavController
                             )
 
                             1 -> DiaryListScreen(
                                 likeItem,
                                 viewModel,
-                                navController
+                                callNavController
                             )
                         }
                     }
