@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.gson.Gson
 import com.jm.diarybycompose.R
@@ -42,9 +41,9 @@ import com.jm.diarybycompose.ui.dialog.RemoveDialog
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    navController: NavController,
     id: Int,
     viewModel: MainViewModel,
+    callNavController: () -> Unit,
     onClicked: (String) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -64,7 +63,7 @@ fun DetailScreen(
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable { navController.popBackStack() })
+                            .clickable { callNavController() })
                 }
             )
         },
@@ -134,7 +133,7 @@ fun DetailScreen(
                 if (itemEntity != null) {
                     viewModel.deleteItem(itemEntity)
                 }
-                navController.popBackStack()
+                callNavController()
             }
             openDialog = false
         }

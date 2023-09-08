@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
@@ -37,7 +36,7 @@ import com.jm.diarybycompose.ui.MainViewModel
 fun DiaryListScreen(
     list: List<ItemEntity>,
     viewModel: MainViewModel,
-    navController: NavController,
+    callNavController: (Int) -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -45,7 +44,7 @@ fun DiaryListScreen(
         Column(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            MyDiaryList(list, viewModel, navController)
+            MyDiaryList(list, viewModel, callNavController)
         }
     }
 }
@@ -54,7 +53,7 @@ fun DiaryListScreen(
 fun MyDiaryList(
     diaryLists: List<ItemEntity>,
     viewModel: MainViewModel,
-    navController: NavController
+    callNavController: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -62,7 +61,7 @@ fun MyDiaryList(
     ) {
         items(diaryLists) { item ->
             GridItem(item, viewModel) { id ->
-                navController.navigate("detail/$id")
+                callNavController(id)
             }
         }
     }
@@ -73,7 +72,7 @@ fun MyDiaryList(
 fun GridItem(
     item: ItemEntity,
     viewModel: MainViewModel,
-    onClicked: (id: Int) -> Unit
+    onClicked: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier.clickable { item.id?.let { onClicked(it) } },

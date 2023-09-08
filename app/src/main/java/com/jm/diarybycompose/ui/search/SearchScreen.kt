@@ -23,14 +23,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.jm.diarybycompose.ui.MainViewModel
 import com.jm.diarybycompose.ui.home.DiaryListScreen
 
 @Composable
 fun SearchScreen(
-    navController: NavController,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    callNavController: (Int) -> Unit,
 ) {
     val (search, setSearch) = rememberSaveable {
         mutableStateOf("")
@@ -67,6 +66,6 @@ fun SearchScreen(
                 Icon(imageVector = Icons.Default.Search, contentDescription = "search")
             }
         }
-        DiaryListScreen(list = searchResult, viewModel = viewModel, navController = navController)
+        DiaryListScreen(list = searchResult, viewModel = viewModel, callNavController)
     }
 }
