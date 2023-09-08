@@ -20,6 +20,7 @@ import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
 import com.jm.diarybycompose.ui.search.SearchScreen
+import com.jm.diarybycompose.ui.splash.SplashScreen
 import com.jm.diarybycompose.ui.update.UpdateScreen
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -43,6 +44,9 @@ fun NavigationController(
         modifier = Modifier.padding(paddingValues)
     ) {
         NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
+//            composable(route = "splash") {
+//                SplashScreen(navController)
+//            }
             composable(route = BottomNavItem.Home.route) {
                 HomeScreen(navController, allItems, viewModel) {
                     navController.navigate("search")
