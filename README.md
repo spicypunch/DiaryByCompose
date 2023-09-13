@@ -1,6 +1,6 @@
 # DiaryByCompose
 
-## 사용한 기술
+## 사용한 라이브러리
 - Jetpack
   - Compose
   - Room
