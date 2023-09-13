@@ -44,29 +44,19 @@ fun DiaryListScreen(
         Column(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            MyDiaryList(list, viewModel, callNavController)
-        }
-    }
-}
-
-@Composable
-fun MyDiaryList(
-    diaryLists: List<ItemEntity>,
-    viewModel: MainViewModel,
-    callNavController: (Int) -> Unit
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier,
-    ) {
-        items(diaryLists) { item ->
-            GridItem(item, viewModel) { id ->
-                callNavController(id)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier,
+            ) {
+                items(list) { item ->
+                    GridItem(item, viewModel) { id ->
+                        callNavController(id)
+                    }
+                }
             }
         }
     }
 }
-
 
 @Composable
 fun GridItem(

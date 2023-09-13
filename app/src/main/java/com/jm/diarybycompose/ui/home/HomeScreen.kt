@@ -54,7 +54,8 @@ fun HomeScreen(
     allItems: List<ItemEntity>,
     viewModel: MainViewModel,
     callNavController: (Int) -> Unit,
-    onClicked: () -> Unit
+    onClicked: () -> Unit,
+    onClickedMenu: (String) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val pages = listOf("일기", "❤️")
@@ -105,6 +106,7 @@ fun HomeScreen(
                             onClick = {
                                 selectedItemIndex = index
                                 scope.launch { drawerState.close() }
+                                onClickedMenu(menuItem.route)
                             },
                             icon = {
                                 Icon(

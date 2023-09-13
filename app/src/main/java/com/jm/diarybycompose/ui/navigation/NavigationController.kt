@@ -1,11 +1,13 @@
 package com.jm.diarybycompose.ui.navigation
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -13,13 +15,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.jm.diarybycompose.data.domain.model.BottomNavItem
+import com.jm.diarybycompose.data.domain.model.MenuItem
 import com.jm.diarybycompose.ui.MainViewModel
 import com.jm.diarybycompose.ui.add.AddScreen
 import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
 import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
+import com.jm.diarybycompose.ui.notification.Notification
 import com.jm.diarybycompose.ui.search.SearchScreen
+import com.jm.diarybycompose.ui.setting.SettingScreen
 import com.jm.diarybycompose.ui.update.UpdateScreen
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -55,6 +60,9 @@ fun NavigationController(
                     },
                     onClicked = {
                         navController.navigate("search")
+                    },
+                    onClickedMenu = { route ->
+                        navController.navigate("$route")
                     }
                 )
             }
@@ -153,6 +161,26 @@ fun NavigationController(
                     navController.navigate("detail/$id")
                 }
             }
+
+            composable(route = MenuItem.Notification.route) {
+                Notification()
+            }
+
+            composable(route = MenuItem.Setting.route) {
+                SettingScreen(
+                    callNavController = {
+                        navController.popBackStack()
+                    },
+                )
+            }
+
+//            composable(route = "setting_notification") {
+//                SettingNotificationScreen(
+//                    callNavController = {
+//                        navController.popBackStack()
+//                    }
+//                )
+//            }
         }
     }
 }
