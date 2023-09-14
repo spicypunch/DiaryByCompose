@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -83,9 +85,12 @@ fun AddScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(top = 16.dp)
+                .padding(start = 16.dp)
+                .padding(end = 16.dp)
         ) {
             Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 OutlinedTextField(
                     value = title,
@@ -125,21 +130,20 @@ fun AddScreen(
                         contentScale = ContentScale.Crop
                     )
                 }
-            }
-            Button(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                onClick = {
-                    if (title.isNotEmpty() && content.isNotEmpty()) {
-                        onClicked(title, content, imageUri)
-                    } else {
-                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요.") }
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    onClick = {
+                        if (title.isNotEmpty() && content.isNotEmpty()) {
+                            onClicked(title, content, imageUri)
+                        } else {
+                            scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요.") }
+                        }
                     }
+                ) {
+                    Text(text = "등록")
                 }
-            ) {
-                Text(text = "등록")
             }
         }
     }

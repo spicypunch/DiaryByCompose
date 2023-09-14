@@ -106,13 +106,13 @@ dependencies {
     // AppCompact
     implementation "androidx.appcompat:appcompat:1.6.1"
 
-    // coil
+    // Coil
     implementation "io.coil-kt:coil-compose:2.2.2"
 
     // TedImagePicker
     implementation "io.github.ParkSangGwon:tedimagepicker:1.4.2"
 
-    // ViewPager2
+    // Pager
     implementation "com.google.accompanist:accompanist-pager:0.20.1"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.20.1"
 
@@ -122,5 +122,5 @@ dependencies {
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:32.2.3')
     implementation "com.google.firebase:firebase-analytics-ktx"
-    implementation "com.google.firebase:firebase-messaging"
+    implementation "com.google.firebase:firebase-messaging-ktx"
 }

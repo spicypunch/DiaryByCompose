@@ -35,36 +35,36 @@ fun CalendarScreen(
     viewModel: MainViewModel,
     onClicked: (Long) -> Unit
 ) {
-    val list = ArrayList<Long>()
-    allItems.forEach { item ->
-        val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일")
-
-        val date = LocalDate.parse(item.date, formatter)
-
-        val dateMillis = date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-        list.add(dateMillis)
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        val datePickerState = rememberDatePickerState(
-            initialDisplayMode = DisplayMode.Picker,
-        )
-        LaunchedEffect(datePickerState.selectedDateMillis) {
-            if (!viewModel.datePicker.value) {
-                datePickerState.selectedDateMillis ?: return@LaunchedEffect
-                onClicked(datePickerState.selectedDateMillis!!)
-                viewModel.clickDatePicker(true)
-            } else {
-                viewModel.clickDatePicker(false)
-            }
-        }
-
-
-        DatePicker(state = datePickerState, modifier = Modifier.fillMaxWidth())
-    }
+//    val list = ArrayList<Long>()
+//    allItems.forEach { item ->
+//        val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일")
+//
+//        val date = LocalDate.parse(item.date, formatter)
+//
+//        val dateMillis = date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+//        list.add(dateMillis)
+//    }
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .verticalScroll(rememberScrollState())
+//    ) {
+//        val datePickerState = rememberDatePickerState(
+//            initialDisplayMode = DisplayMode.Picker,
+//        )
+//        LaunchedEffect(datePickerState.selectedDateMillis) {
+//            if (!viewModel.datePicker.value) {
+//                datePickerState.selectedDateMillis ?: return@LaunchedEffect
+//                onClicked(datePickerState.selectedDateMillis!!)
+//                viewModel.clickDatePicker(true)
+//            } else {
+//                viewModel.clickDatePicker(false)
+//            }
+//        }
+//
+//
+//        DatePicker(state = datePickerState, modifier = Modifier.fillMaxWidth())
+//    }
 
     /**
      * SDK34 요구
