@@ -163,7 +163,11 @@ fun NavigationController(
             }
 
             composable(route = MenuItem.Notification.route) {
-                Notification()
+                Notification(
+                    callNavController = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             composable(route = MenuItem.Setting.route) {

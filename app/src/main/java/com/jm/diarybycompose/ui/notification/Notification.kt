@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.dp
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Notification() {
+fun Notification(
+    callNavController: () -> Unit,
+) {
     Toast.makeText(LocalContext.current, "추가예정입니다.", Toast.LENGTH_SHORT).show()
     Scaffold(
         topBar = {
@@ -31,7 +33,7 @@ fun Notification() {
                         contentDescription = "noti",
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable { })
+                            .clickable { callNavController() })
                 }
             )
         },

@@ -15,12 +15,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         Log.d(TAG, "onMessageReceived() remoteMessage: $message")
     }
-
-    private fun sendNotification(
-        messageTitle: String,
-        messageBody: String,
-        schemeAndroid: String,
-    ) {
-
-    }
 }
