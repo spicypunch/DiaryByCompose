@@ -3,6 +3,7 @@ package com.jm.diarybycompose.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +41,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.jm.diarybycompose.data.domain.model.BottomNavItem
 import com.jm.diarybycompose.ui.add.AddScreen
 import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
@@ -103,6 +106,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun getFCMToken(): String? {
+        var token: String? = null
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.d("Fetching FCM registration ")
+            }
+        })
     }
 }
 
