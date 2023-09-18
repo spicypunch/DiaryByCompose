@@ -3,7 +3,6 @@ package com.jm.diarybycompose.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,10 +12,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -34,33 +31,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessaging
 import com.jm.diarybycompose.data.domain.model.BottomNavItem
-import com.jm.diarybycompose.ui.add.AddScreen
-import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
-import com.jm.diarybycompose.ui.calendar.CalendarScreen
-import com.jm.diarybycompose.ui.detail.DetailScreen
-import com.jm.diarybycompose.ui.home.HomeScreen
 import com.jm.diarybycompose.ui.navigation.NavigationController
-import com.jm.diarybycompose.ui.search.SearchScreen
 import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
-import com.jm.diarybycompose.ui.update.UpdateScreen
 import dagger.hilt.android.AndroidEntryPoint
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -108,19 +87,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    private fun getFCMToken(): String? {
-        var token: String? = null
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.e(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            token = task.result
-            Log.d(TAG, "FCM Token is $token")
-        })
-        return token
     }
 }
 
@@ -181,4 +147,17 @@ fun App() {
     ) {
         NavigationController(navController, it)
     }
+}
+
+private fun getFCMToken(): String? {
+    var token: String? = null
+    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        if (!task.isSuccessful) {
+            Log.e(TAG, "Fetching FCM registration token failed", task.exception)
+            return@OnCompleteListener
+        }
+        token = task.result
+        Log.d(TAG, "FCM Token is $token")
+    })
+    return token
 }
