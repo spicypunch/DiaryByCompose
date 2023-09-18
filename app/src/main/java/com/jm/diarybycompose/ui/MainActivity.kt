@@ -42,6 +42,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessaging
 import com.jm.diarybycompose.data.domain.model.BottomNavItem
 import com.jm.diarybycompose.ui.add.AddScreen
@@ -112,9 +113,13 @@ class MainActivity : ComponentActivity() {
         var token: String? = null
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.d("Fetching FCM registration ")
+                Log.e(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
             }
+            token = task.result
+            Log.d(TAG, "FCM Token is $token")
         })
+        return token
     }
 }
 
