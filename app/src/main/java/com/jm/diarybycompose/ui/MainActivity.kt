@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("MutableCollectionMutableState")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getFCMToken()
         setContent {
             DiaryByComposeTheme {
                 val permissionsList: Array<String> =
