@@ -109,19 +109,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    private fun getFCMToken(): String? {
-        var token: String? = null
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.e(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            token = task.result
-            Log.d(TAG, "FCM Token is $token")
-        })
-        return token
-    }
 }
 
 @Composable
@@ -181,4 +168,17 @@ fun App() {
     ) {
         NavigationController(navController, it)
     }
+}
+
+private fun getFCMToken(): String? {
+    var token: String? = null
+    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        if (!task.isSuccessful) {
+            Log.e(TAG, "Fetching FCM registration token failed", task.exception)
+            return@OnCompleteListener
+        }
+        token = task.result
+        Log.d(TAG, "FCM Token is $token")
+    })
+    return token
 }
