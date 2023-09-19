@@ -21,14 +21,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,8 +51,6 @@ fun AddSpecificDateScreen(
     callNavController: () -> Unit,
     onClicked: (String, String, Uri?) -> Unit
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val (title, setTitle) = rememberSaveable {
         mutableStateOf("")
     }
@@ -82,9 +78,6 @@ fun AddSpecificDateScreen(
                 }
             )
         },
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
     ) {
         Box(
             modifier = Modifier
@@ -141,10 +134,9 @@ fun AddSpecificDateScreen(
                 onClick = {
                     if (title.isNotEmpty() && content.isNotEmpty()) {
                         onClicked(title, content, imageUri)
-                    } else {
-                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요.") }
                     }
-                }
+                },
+                enabled = title.isNotEmpty() && content.isNotEmpty()
             ) {
                 Text(text = "등록")
             }
