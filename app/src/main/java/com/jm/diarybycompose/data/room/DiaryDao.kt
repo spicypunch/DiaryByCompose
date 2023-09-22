@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.data.domain.model.NotificationStateEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -33,4 +34,13 @@ interface DiaryDao {
 
     @Query("SELECT * FROM ItemEntity WHERE title LIKE '%' || :search || '%'")
     fun searchItem(search: String): Flow<List<ItemEntity>>
+
+    @Insert
+    fun insertNotificationState(stateEntity: NotificationStateEntity)
+
+    @Update
+    fun updateNotificationState(stateEntity: NotificationStateEntity)
+
+    @Query("SELECT * FROM NotificationStateEntity WHERE id = 1")
+    fun getNotificationState(): Flow<NotificationStateEntity>
 }

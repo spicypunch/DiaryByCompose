@@ -1,13 +1,10 @@
 package com.jm.diarybycompose.ui.navigation
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -43,7 +40,6 @@ fun NavigationController(
     val allItems = viewModel.allItem.value
     val currentTime: Long = System.currentTimeMillis()
     val dateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.KOREA)
-
     Box(
         modifier = Modifier.padding(paddingValues)
     ) {
@@ -172,6 +168,7 @@ fun NavigationController(
 
             composable(route = MenuItem.Setting.route) {
                 SettingScreen(
+                    viewModel,
                     callNavController = {
                         navController.popBackStack()
                     },

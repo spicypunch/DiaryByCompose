@@ -1,6 +1,7 @@
 package com.jm.diarybycompose.ui.setting
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,14 +27,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jm.diarybycompose.data.domain.model.NotificationStateEntity
+import com.jm.diarybycompose.ui.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingScreen(
+    viewModel: MainViewModel,
     callNavController: () -> Unit,
 ) {
-    var switchState by remember { mutableStateOf(true) }
+    viewModel.getNotificationState()
+    val notificationState = viewModel.notificationState.value?.state
+    Log.e("test", notificationState.toString())
+    var switchState by remember { mutableStateOf(notificationState) }
+    Log.e("test2", switchState.toString())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -64,9 +72,10 @@ fun SettingScreen(
             ) {
                 Text(text = "알림 받기", fontSize = 20.sp)
                 Switch(
-                    checked = switchState,
+                    checked = false,
                     onCheckedChange = { newState ->
-                        switchState = newState
+                        switchState = false
+                        viewModel.updateNotificationState(NotificationStateEntity(id = 1, state = newState))
                     }
                 )
             }
