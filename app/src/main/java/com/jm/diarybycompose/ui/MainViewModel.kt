@@ -7,10 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.data.domain.model.NotificationStateEntity
 import com.jm.diarybycompose.data.repository.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,6 +44,9 @@ class MainViewModel @Inject constructor(
 
     private val _searchResult = mutableStateOf(emptyList<ItemEntity>())
     val searchResult: State<List<ItemEntity>> = _searchResult
+
+    private var _notificationState = mutableStateOf<NotificationStateEntity?>(null)
+    val notificationState: State<NotificationStateEntity?> = _notificationState
 
     fun insertItem(title: String, content: String, imageUri: Uri?, date: String) {
         viewModelScope.launch {
@@ -145,7 +150,36 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
     fun clickDatePicker(click: Boolean) {
         _datePicker.value = click
+    }
+
+    fun insertNotificationState(stateEntity: NotificationStateEntity) {
+        viewModelScope.launch {
+            try {
+                roomRepository.insertNotificationState(stateEntity)
+            } catch (e: Exception) {
+                Log.e("InsertNotificationErr", e.toString())
+            }
+        }
+    }
+
+    fun updateNotificationState(stateEntity: NotificationStateEntity) {
+        viewModelScope.launch {
+            try {
+                roomRepository.updateNotificationState(stateEntity)
+            } catch (e: Exception) {
+                Log.e("UpdateNotificationErr", e.toString())
+            }
+        }
+    }
+
+    fun getNotificationState() {
+        viewModelScope.launch {
+            roomRepository.getNotificationState().collect { result ->
+                _notificationState.value = result
+            }
+        }
     }
 }
