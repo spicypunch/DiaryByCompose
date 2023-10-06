@@ -19,6 +19,7 @@ import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
 import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
+import com.jm.diarybycompose.ui.map.MapScreen
 import com.jm.diarybycompose.ui.notification.Notification
 import com.jm.diarybycompose.ui.search.SearchScreen
 import com.jm.diarybycompose.ui.setting.SettingScreen
@@ -78,10 +79,13 @@ fun NavigationController(
                     }
                 )
             }
-            composable(route = BottomNavItem.Calendar.route) {
-                CalendarScreen(allItems, viewModel) { dateMillis ->
-                    navController.navigate("date/$dateMillis")
-                }
+//            composable(route = BottomNavItem.Calendar.route) {
+//                CalendarScreen(allItems, viewModel) { dateMillis ->
+//                    navController.navigate("date/$dateMillis")
+//                }
+//            }
+            composable(route = BottomNavItem.Map.route) {
+                MapScreen()
             }
             composable(
                 route = "detail/{id}", arguments = listOf(navArgument("id") {
