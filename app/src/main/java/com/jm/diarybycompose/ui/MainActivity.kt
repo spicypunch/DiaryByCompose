@@ -111,7 +111,7 @@ fun App() {
     val navItems = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
-        BottomNavItem.Calendar,
+        BottomNavItem.Map,
     )
     Scaffold(
         bottomBar = {
