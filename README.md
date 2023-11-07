@@ -23,8 +23,3 @@ filter - 날짜순, 가나다순 등
 달력 - 달력을 표시하고 날짜를 선택하면 해달 날짜로 일기 작성 
 <br> 
 지도 - 내가 일기를 작성했던 순간의 위치를 기록하고 지도에 마킹
-
-
-------------------
-
-PlayStore: https://play.google.com/store/apps/details?id=com.jm.diarybycompose&pli=1
