@@ -8,6 +8,8 @@
   - ViewPager
 - Hilt
 - Coroutine
+- DataStore
+- GoogleMap
 - FCM
 - Material3
 - Coil
