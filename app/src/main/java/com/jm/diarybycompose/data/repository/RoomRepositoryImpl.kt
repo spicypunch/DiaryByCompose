@@ -1,7 +1,6 @@
 package com.jm.diarybycompose.data.repository
 
 import com.jm.diarybycompose.data.domain.model.ItemEntity
-import com.jm.diarybycompose.data.domain.model.NotificationStateEntity
 import com.jm.diarybycompose.data.room.DiaryDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -35,13 +34,4 @@ class RoomRepositoryImpl @Inject constructor(
 
     override fun searchItem(search: String): Flow<List<ItemEntity>> = diaryDao.searchItem(search)
 
-    override suspend fun insertNotificationState(stateEntity: NotificationStateEntity) = withContext(Dispatchers.IO) {
-        diaryDao.insertNotificationState(stateEntity)
-    }
-
-    override suspend fun updateNotificationState(stateEntity: NotificationStateEntity)  = withContext(Dispatchers.IO) {
-        diaryDao.updateNotificationState(stateEntity)
-    }
-
-    override fun getNotificationState(): Flow<NotificationStateEntity> = diaryDao.getNotificationState()
 }
