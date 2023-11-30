@@ -99,7 +99,7 @@ fun HomeScreen(
             drawerContent = {
                 ModalDrawerSheet {
                     Spacer(modifier = Modifier.height(16.dp))
-                    items.forEachIndexed { index, menuItem ->
+                    items.forEachIndexed { index, menuItem ->1
                         NavigationDrawerItem(
                             label = { Text(text = menuItem.title) },
                             selected = index == selectedItemIndex,
@@ -115,7 +115,7 @@ fun HomeScreen(
                                 )
                             },
                             badge = {
-                                if (menuItem.title == "Notification") Text(text = "12")
+                                if (menuItem.title == "Notification") Text(text = "0")
                             },
                             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                         )

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 
 @Entity
@@ -14,5 +15,7 @@ data class ItemEntity(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "date") val date: String,
-    @ColumnInfo(name = "like") val like: Boolean
+    @ColumnInfo(name = "like") val like: Boolean,
+    @ColumnInfo(name = "latitude") val latLng: Double,
+    @ColumnInfo(name = "longitude") val longitude: Double
 ) : Parcelable

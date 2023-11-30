@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,6 +37,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.google.android.gms.maps.model.LatLng
+import com.jm.diarybycompose.util.getMyLocation
 import gun0912.tedimagepicker.builder.TedImagePicker
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -44,7 +46,7 @@ import gun0912.tedimagepicker.builder.TedImagePicker
 @Composable
 fun AddScreen(
     callNavController: () -> Unit,
-    onClicked: (String, String, Uri?) -> Unit
+    onClicked: (String, String, Uri?, LatLng) -> Unit
 ) {
     val (title, setTitle) = rememberSaveable {
         mutableStateOf("")
@@ -57,13 +59,15 @@ fun AddScreen(
     }
     val context = LocalContext.current
 
+    val latLng = getMyLocation(LocalContext.current)
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "일기 쓰기", modifier = Modifier.padding(start = 8.dp)) },
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "home",
                         modifier = Modifier
                             .padding(start = 8.dp)
@@ -126,7 +130,7 @@ fun AddScreen(
                         .padding(top = 10.dp),
                     onClick = {
                         if (title.isNotEmpty() && content.isNotEmpty()) {
-                            onClicked(title, content, imageUri)
+                            onClicked(title, content, imageUri, latLng)
                         }
                     },
                     enabled = title.isNotEmpty() && content.isNotEmpty()

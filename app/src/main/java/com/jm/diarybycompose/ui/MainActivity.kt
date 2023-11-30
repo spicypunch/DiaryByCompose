@@ -55,13 +55,17 @@ class MainActivity : ComponentActivity() {
                         arrayOf(
                             Manifest.permission.READ_MEDIA_IMAGES,
                             Manifest.permission.CAMERA,
-                            Manifest.permission.POST_NOTIFICATIONS
+                            Manifest.permission.POST_NOTIFICATIONS,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
                         )
                     } else {
                         arrayOf(
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.CAMERA,
-                            Manifest.permission.POST_NOTIFICATIONS
+                            Manifest.permission.POST_NOTIFICATIONS,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
                         )
                     }
                 var grantedList by remember { mutableStateOf(mutableListOf(false)) }

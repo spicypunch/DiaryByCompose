@@ -142,20 +142,20 @@ fun UpdateScreen(
                     .fillMaxWidth()
                     .padding(top = 16.dp),
                 onClick = {
-                    if (title.isNotEmpty() && content.isNotEmpty()) {
-                        onClicked(
-                            ItemEntity(
-                                id = itemEntity.id,
-                                imageUri = imageUri.toString(),
-                                title = title,
-                                content = content,
-                                date = itemEntity.date,
-                                like = itemEntity.like
-                            )
-                        )
-                    } else {
-                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
-                    }
+//                    if (title.isNotEmpty() && content.isNotEmpty()) {
+//                        onClicked(
+//                            ItemEntity(
+//                                id = itemEntity.id,
+//                                imageUri = imageUri.toString(),
+//                                title = title,
+//                                content = content,
+//                                date = itemEntity.date,
+//                                like = itemEntity.like
+//                            )
+//                        )
+//                    } else {
+//                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
+//                    }
                 }
             ) {
                 Text(text = "수정")

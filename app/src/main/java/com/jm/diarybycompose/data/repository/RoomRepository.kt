@@ -1,7 +1,6 @@
 package com.jm.diarybycompose.data.repository
 
 import com.jm.diarybycompose.data.domain.model.ItemEntity
-import com.jm.diarybycompose.data.domain.model.NotificationStateEntity
 import kotlinx.coroutines.flow.Flow
 
 interface RoomRepository {
@@ -22,9 +21,4 @@ interface RoomRepository {
 
     fun searchItem(search: String): Flow<List<ItemEntity>>
 
-    suspend fun insertNotificationState(stateEntity: NotificationStateEntity)
-
-    suspend fun updateNotificationState(stateEntity: NotificationStateEntity)
-
-    fun getNotificationState(): Flow<NotificationStateEntity>
 }

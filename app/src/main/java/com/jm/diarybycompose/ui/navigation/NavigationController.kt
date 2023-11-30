@@ -15,8 +15,6 @@ import com.jm.diarybycompose.data.domain.model.BottomNavItem
 import com.jm.diarybycompose.data.domain.model.MenuItem
 import com.jm.diarybycompose.ui.MainViewModel
 import com.jm.diarybycompose.ui.add.AddScreen
-import com.jm.diarybycompose.ui.add.AddSpecificDateScreen
-import com.jm.diarybycompose.ui.calendar.CalendarScreen
 import com.jm.diarybycompose.ui.detail.DetailScreen
 import com.jm.diarybycompose.ui.home.HomeScreen
 import com.jm.diarybycompose.ui.map.MapScreen
@@ -34,9 +32,9 @@ import java.util.Locale
 @Composable
 fun NavigationController(
     navController: NavHostController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    viewModel: MainViewModel = viewModel()
 ) {
-    val viewModel = viewModel<MainViewModel>()
     viewModel.getAllItem()
     val allItems = viewModel.allItem.value
     val currentTime: Long = System.currentTimeMillis()
@@ -68,12 +66,13 @@ fun NavigationController(
                     callNavController = {
                         navController.popBackStack()
                     },
-                    onClicked = { title, content, uri ->
+                    onClicked = { title, content, uri, latLng->
                         viewModel.insertItem(
                             title = title,
                             content = content,
                             imageUri = uri,
-                            date = dateFormat.format(Date(currentTime))
+                            date = dateFormat.format(Date(currentTime)),
+                            latLng = latLng
                         )
                         navController.popBackStack()
                     }
@@ -114,31 +113,31 @@ fun NavigationController(
                 }
             }
 
-            composable(
-                route = "date/{dateMillis}",
-                arguments = listOf(navArgument("dateMillis") {
-                    type = NavType.LongType
-                })
-            ) { backStackEntry ->
-                val dateMillis = backStackEntry.arguments?.getLong("dateMillis")
-                dateMillis?.let {
-                    AddSpecificDateScreen(
-                        dateMillis,
-                        callNavController = {
-                            navController.popBackStack()
-                        },
-                        onClicked = { title, content, uri ->
-                            viewModel.insertItem(
-                                title = title,
-                                content = content,
-                                imageUri = uri,
-                                date = dateFormat.format(Date(dateMillis))
-                            )
-                            navController.popBackStack()
-                        }
-                    )
-                }
-            }
+//            composable(
+//                route = "date/{dateMillis}",
+//                arguments = listOf(navArgument("dateMillis") {
+//                    type = NavType.LongType
+//                })
+//            ) { backStackEntry ->
+//                val dateMillis = backStackEntry.arguments?.getLong("dateMillis")
+//                dateMillis?.let {
+//                    AddSpecificDateScreen(
+//                        dateMillis,
+//                        callNavController = {
+//                            navController.popBackStack()
+//                        },
+//                        onClicked = { title, content, uri ->
+//                            viewModel.insertItem(
+//                                title = title,
+//                                content = content,
+//                                imageUri = uri,
+//                                date = dateFormat.format(Date(dateMillis))
+//                            )
+//                            navController.popBackStack()
+//                        }
+//                    )
+//                }
+//            }
 
             composable(route = "update/{itemJsonString}") { backStackEntry ->
                 val itemJsonString = backStackEntry.arguments?.getString("itemJsonString")
@@ -172,7 +171,6 @@ fun NavigationController(
 
             composable(route = MenuItem.Setting.route) {
                 SettingScreen(
-                    viewModel,
                     callNavController = {
                         navController.popBackStack()
                     },
