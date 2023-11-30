@@ -86,16 +86,16 @@ fun GridItem(
                     contentAlignment = Alignment.TopEnd
                 ) {
                     IconButton(onClick = {
-                        viewModel.updateItem(
-                            ItemEntity(
-                                id = item.id,
-                                title = item.title,
-                                content = item.content,
-                                imageUri = item.imageUri,
-                                date = item.date,
-                                like = !item.like
-                            )
-                        )
+//                        viewModel.updateItem(
+//                            ItemEntity(
+//                                id = item.id,
+//                                title = item.title,
+//                                content = item.content,
+//                                imageUri = item.imageUri,
+//                                date = item.date,
+//                                like = !item.like
+//                            )
+//                        )
                     }) {
                         Icon(
                             imageVector = if (!item.like) Icons.Default.FavoriteBorder else Icons.Default.Favorite,
