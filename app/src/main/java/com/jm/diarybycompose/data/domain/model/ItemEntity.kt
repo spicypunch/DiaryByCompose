@@ -16,6 +16,6 @@ data class ItemEntity(
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "date") val date: String,
     @ColumnInfo(name = "like") val like: Boolean,
-    @ColumnInfo(name = "latitude") val latLng: Double,
+    @ColumnInfo(name = "latitude") val latitude: Double,
     @ColumnInfo(name = "longitude") val longitude: Double
 ) : Parcelable

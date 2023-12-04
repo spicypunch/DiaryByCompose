@@ -38,10 +38,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jm.diarybycompose.data.domain.model.ItemEntity
+import com.jm.diarybycompose.util.getMyLocation
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
 
@@ -56,6 +58,8 @@ fun UpdateScreen(
     val gson = Gson()
     val itemType = object : TypeToken<ItemEntity>() {}.type
     val itemEntity: ItemEntity = gson.fromJson(itemJsonString, itemType)
+
+    val latLng = getMyLocation(LocalContext.current)
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -129,7 +133,7 @@ fun UpdateScreen(
                             .padding(start = 8.dp)
                             .aspectRatio(1f)
                             .clip(RectangleShape),
-                        painter = rememberImagePainter(data = imageUri),
+                        painter = rememberAsyncImagePainter(model = imageUri),
                         contentDescription = null,
                         contentScale = ContentScale.Crop
                     )
@@ -142,20 +146,22 @@ fun UpdateScreen(
                     .fillMaxWidth()
                     .padding(top = 16.dp),
                 onClick = {
-//                    if (title.isNotEmpty() && content.isNotEmpty()) {
-//                        onClicked(
-//                            ItemEntity(
-//                                id = itemEntity.id,
-//                                imageUri = imageUri.toString(),
-//                                title = title,
-//                                content = content,
-//                                date = itemEntity.date,
-//                                like = itemEntity.like
-//                            )
-//                        )
-//                    } else {
-//                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
-//                    }
+                    if (title.isNotEmpty() && content.isNotEmpty()) {
+                        onClicked(
+                            ItemEntity(
+                                id = itemEntity.id,
+                                imageUri = imageUri.toString(),
+                                title = title,
+                                content = content,
+                                date = itemEntity.date,
+                                like = itemEntity.like,
+                                latitude = latLng.latitude,
+                                longitude = latLng.longitude,
+                            )
+                        )
+                    } else {
+                        scope.launch { snackbarHostState.showSnackbar("빈칸을 채워주세요") }
+                    }
                 }
             ) {
                 Text(text = "수정")

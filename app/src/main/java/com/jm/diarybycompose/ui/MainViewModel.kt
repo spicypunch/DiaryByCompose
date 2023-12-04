@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
                         imageUri = imageUri.toString(),
                         date = date,
                         like = false,
-                        latLng = latLng.latitude,
+                        latitude = latLng.latitude,
                         longitude = latLng.longitude
                     )
                 )

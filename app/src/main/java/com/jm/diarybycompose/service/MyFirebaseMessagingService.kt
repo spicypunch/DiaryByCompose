@@ -12,9 +12,19 @@ import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.jm.diarybycompose.R
+import com.jm.diarybycompose.data.datastore.DataStoreModule
 import com.jm.diarybycompose.ui.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    private lateinit var dataStore: DataStoreModule
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken(): $token")
@@ -27,10 +37,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         } else {
             Log.d(TAG, "onMessageReceived(): $remoteMessage")
         }
-
     }
 
     private fun sendNotification(remoteMessage: RemoteMessage) {
+
+        val context = this.applicationContext
+        dataStore = DataStoreModule(context)
+
         val id = 0
         val title = remoteMessage.notification!!.title
         val body = remoteMessage.notification!!.body
@@ -52,10 +65,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSound(soundUri)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
-
-        notificationManager.createNotificationChannel(channel)
-        notificationManager.notify(id, notificationBuilder.build())
+        applicationScope.launch {
+            dataStore.getNotificationState.collect {
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val channel =
+                    NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
+                notificationManager.createNotificationChannel(channel)
+                if (it) {
+                    notificationManager.notify(id, notificationBuilder.build())
+                } else {
+//                    notificationManager.deleteNotificationChannel(channelId)
+                }
+            }
+        }
     }
 }

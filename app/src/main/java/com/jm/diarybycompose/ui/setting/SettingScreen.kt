@@ -1,6 +1,10 @@
 package com.jm.diarybycompose.ui.setting
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.jm.diarybycompose.data.datastore.DataStoreModule
 import kotlinx.coroutines.launch
 
@@ -41,7 +46,7 @@ fun SettingScreen(
     val scope = rememberCoroutineScope()
     val dataStore = DataStoreModule(LocalContext.current)
     var notificationState by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     LaunchedEffect(Unit) {
         dataStore.getNotificationState.collect {
