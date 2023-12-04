@@ -25,12 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.ui.MainViewModel
+import com.jm.diarybycompose.util.getMyLocation
 
 @Composable
 fun DiaryListScreen(
@@ -64,6 +66,7 @@ fun GridItem(
     viewModel: MainViewModel,
     onClicked: (Int) -> Unit
 ) {
+    val latLng = getMyLocation(LocalContext.current)
     Column(
         modifier = Modifier.clickable { item.id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
@@ -86,16 +89,18 @@ fun GridItem(
                     contentAlignment = Alignment.TopEnd
                 ) {
                     IconButton(onClick = {
-//                        viewModel.updateItem(
-//                            ItemEntity(
-//                                id = item.id,
-//                                title = item.title,
-//                                content = item.content,
-//                                imageUri = item.imageUri,
-//                                date = item.date,
-//                                like = !item.like
-//                            )
-//                        )
+                        viewModel.updateItem(
+                            ItemEntity(
+                                id = item.id,
+                                title = item.title,
+                                content = item.content,
+                                imageUri = item.imageUri,
+                                date = item.date,
+                                like = !item.like,
+                                latitude = item.latitude,
+                                longitude = item.longitude
+                            )
+                        )
                     }) {
                         Icon(
                             imageVector = if (!item.like) Icons.Default.FavoriteBorder else Icons.Default.Favorite,

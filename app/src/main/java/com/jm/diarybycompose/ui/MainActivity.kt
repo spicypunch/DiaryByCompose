@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,10 +37,12 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessaging
+import com.jm.diarybycompose.data.datastore.DataStoreModule
 import com.jm.diarybycompose.data.domain.model.BottomNavItem
 import com.jm.diarybycompose.ui.navigation.NavigationController
 import com.jm.diarybycompose.ui.theme.DiaryByComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -111,6 +114,18 @@ fun DemandPermissionScreen(onClick: () -> Unit) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun App() {
+//    val dataStore = DataStoreModule(LocalContext.current)
+//
+//    val isNotificationGranted = ContextCompat.checkSelfPermission(
+//        LocalContext.current,
+//        Manifest.permission.POST_NOTIFICATIONS
+//    ) == PackageManager.PERMISSION_GRANTED
+//
+//    val scope = rememberCoroutineScope()
+//    scope.launch {
+//        dataStore.saveNotificationState(isNotificationGranted)
+//    }
+
     val navController = rememberNavController()
     val navItems = listOf(
         BottomNavItem.Home,

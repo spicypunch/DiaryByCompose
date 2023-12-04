@@ -26,7 +26,7 @@ class DataStoreModule(private val context: Context) {
             }
         }
         .map { preference ->
-            preference[notificationState] ?: false
+            preference[notificationState] ?: true
         }
 
 

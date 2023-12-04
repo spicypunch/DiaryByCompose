@@ -84,7 +84,9 @@ fun NavigationController(
 //                }
 //            }
             composable(route = BottomNavItem.Map.route) {
-                MapScreen()
+                MapScreen(viewModel) { id ->
+                    navController.navigate("detail/$id")
+                }
             }
             composable(
                 route = "detail/{id}", arguments = listOf(navArgument("id") {
