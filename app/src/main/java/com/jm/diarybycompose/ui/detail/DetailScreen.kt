@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.google.gson.Gson
 import com.jm.diarybycompose.R
@@ -42,7 +43,7 @@ import com.jm.diarybycompose.ui.dialog.RemoveDialog
 @Composable
 fun DetailScreen(
     id: Int,
-    viewModel: MainViewModel,
+    viewModel: MainViewModel = hiltViewModel(),
     callNavController: () -> Unit,
     onClicked: (String) -> Unit
 ) {
