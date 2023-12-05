@@ -3,17 +3,18 @@ package com.jm.diarybycompose.ui.map
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -53,11 +54,15 @@ fun MapScreen(
         uiSettings = uiSettings
     ) {
         for (i in allItems) {
+            var image: BitmapDescriptor? = null
+            loadBitmapFromUri(LocalContext.current, Uri.parse(i.imageUri)) { bitmapDescriptor ->
+                image = bitmapDescriptor
+            }
             if (i.imageUri != null) {
                 Marker(
                     state = MarkerState(position = LatLng(i.latitude, i.longitude)),
                     title = i.title,
-                    icon = uriToBitmapDescriptor(LocalContext.current, Uri.parse(i.imageUri)),
+                    icon = image,
                     onClick = {
                         i.id?.let { id -> onClicked(id) }
                         true
@@ -77,20 +82,19 @@ fun MapScreen(
     }
 }
 
-private fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
-    return try {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        BitmapFactory.decodeStream(inputStream)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
+private fun loadBitmapFromUri(context: Context, uri: Uri, callBack: (BitmapDescriptor?) -> Unit) {
+    Glide.with(context)
+        .asBitmap()
+        .load(uri)
+        .override(100, 100)
+        .into(object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resource)
+                callBack(bitmapDescriptor)
+            }
 
-private fun uriToBitmapDescriptor(context: Context, uri: Uri): BitmapDescriptor? {
-    val bitmap = uriToBitmap(context, uri)
-    return bitmap?.let {
-        val scaledBitmap = Bitmap.createScaledBitmap(it, 150, 150, false)
-        BitmapDescriptorFactory.fromBitmap(scaledBitmap)
-    }
+            override fun onLoadCleared(placeholder: Drawable?) {
+                callBack(null)
+            }
+        })
 }
