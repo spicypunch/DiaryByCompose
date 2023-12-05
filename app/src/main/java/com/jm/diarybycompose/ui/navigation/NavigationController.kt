@@ -62,7 +62,7 @@ fun NavigationController(
                     callNavController = {
                         navController.popBackStack()
                     },
-                    onClicked = { title, content, uri, latLng->
+                    onClicked = { title, content, uri, latLng ->
                         viewModel.insertItem(
                             title = title,
                             content = content,
