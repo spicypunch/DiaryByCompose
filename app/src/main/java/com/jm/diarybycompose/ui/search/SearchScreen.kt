@@ -23,12 +23,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jm.diarybycompose.ui.MainViewModel
 import com.jm.diarybycompose.ui.home.DiaryListScreen
 
 @Composable
 fun SearchScreen(
-    viewModel: MainViewModel,
+    viewModel: MainViewModel = hiltViewModel(),
     callNavController: (Int) -> Unit,
 ) {
     val (search, setSearch) = rememberSaveable {

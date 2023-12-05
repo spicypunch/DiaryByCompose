@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -33,10 +33,8 @@ import java.util.Locale
 fun NavigationController(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
-    viewModel.getAllItem()
-    val allItems = viewModel.allItem.value
     val currentTime: Long = System.currentTimeMillis()
     val dateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.KOREA)
     Box(
@@ -48,8 +46,6 @@ fun NavigationController(
 //            }
             composable(route = BottomNavItem.Home.route) {
                 HomeScreen(
-                    allItems,
-                    viewModel,
                     callNavController = { id ->
                         navController.navigate("detail/$id")
                     },
@@ -57,7 +53,7 @@ fun NavigationController(
                         navController.navigate("search")
                     },
                     onClickedMenu = { route ->
-                        navController.navigate("$route")
+                        navController.navigate(route)
                     }
                 )
             }
@@ -84,7 +80,7 @@ fun NavigationController(
 //                }
 //            }
             composable(route = BottomNavItem.Map.route) {
-                MapScreen(viewModel) { id ->
+                MapScreen { id ->
                     navController.navigate("detail/$id")
                 }
             }
@@ -97,7 +93,6 @@ fun NavigationController(
                 id?.let {
                     DetailScreen(
                         id,
-                        viewModel,
                         callNavController = {
                             navController.popBackStack()
                         },
@@ -158,7 +153,7 @@ fun NavigationController(
             }
 
             composable(route = "search") {
-                SearchScreen(viewModel) {
+                SearchScreen {
                     navController.navigate("detail/$id")
                 }
             }

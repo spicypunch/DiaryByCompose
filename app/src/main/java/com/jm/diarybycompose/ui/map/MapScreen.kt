@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -31,7 +32,7 @@ import com.jm.diarybycompose.util.getMyLocation
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MapScreen(
-    viewModel: MainViewModel,
+    viewModel: MainViewModel = hiltViewModel(),
     onClicked: (Int) -> Unit
 ) {
     viewModel.getAllItem()

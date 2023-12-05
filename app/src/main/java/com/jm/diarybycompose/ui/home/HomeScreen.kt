@@ -1,7 +1,9 @@
 package com.jm.diarybycompose.ui.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -36,11 +38,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.data.domain.model.MenuItem
 import com.jm.diarybycompose.ui.MainViewModel
@@ -51,8 +56,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(
-    allItems: List<ItemEntity>,
-    viewModel: MainViewModel,
+    viewModel: MainViewModel = hiltViewModel(),
     callNavController: (Int) -> Unit,
     onClicked: () -> Unit,
     onClickedMenu: (String) -> Unit
@@ -64,9 +68,11 @@ fun HomeScreen(
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val items = listOf(MenuItem.Notification, MenuItem.Setting)
 
+    viewModel.getAllItem()
     viewModel.getLikeItem()
 
-    val likeItem = viewModel.likeItem.value
+    var allItems by remember { mutableStateOf(mutableListOf(viewModel.allItem.value)) }
+    var likeItem by remember { mutableStateOf(mutableListOf(viewModel.likeItem.value)) }
 
     LaunchedEffect(Unit) {
         viewModel.insertResult.collectLatest {
@@ -99,7 +105,7 @@ fun HomeScreen(
             drawerContent = {
                 ModalDrawerSheet {
                     Spacer(modifier = Modifier.height(16.dp))
-                    items.forEachIndexed { index, menuItem ->1
+                    items.forEachIndexed { index, menuItem ->
                         NavigationDrawerItem(
                             label = { Text(text = menuItem.title) },
                             selected = index == selectedItemIndex,
@@ -133,11 +139,19 @@ fun HomeScreen(
                                 Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu")
                             }
                         }, actions = {
-                            IconButton(onClick = { onClicked() }) {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "Search"
-                                )
+                            Row {
+                                IconButton(onClick = { onClicked() }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "Search"
+                                    )
+                                }
+                                IconButton(onClick = { allItems }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_filter_list_24),
+                                        contentDescription = "filter"
+                                    )
+                                }
                             }
                         }
                     )
