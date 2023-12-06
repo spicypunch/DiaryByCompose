@@ -12,6 +12,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,12 +67,23 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val items = listOf(MenuItem.Notification, MenuItem.Setting)
+    var isDropDownMenuExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     viewModel.getAllItem()
     viewModel.getLikeItem()
 
-    var allItems by remember { mutableStateOf(mutableListOf(viewModel.allItem.value)) }
-    var likeItem by remember { mutableStateOf(mutableListOf(viewModel.likeItem.value)) }
+    var allItems = viewModel.allItem.value
+    var likeItem = viewModel.likeItem.value
+
+    val allItemsSaver = remember {
+        mutableStateOf(viewModel.allItem.value)
+    }
+
+    val likeItemsSaver = remember {
+        mutableStateOf(viewModel.likeItem.value)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.insertResult.collectLatest {
@@ -136,7 +149,8 @@ fun HomeScreen(
                             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                                 Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu")
                             }
-                        }, actions = {
+                        },
+                        actions = {
                             Row {
                                 IconButton(onClick = { onClicked() }) {
                                     Icon(
@@ -144,11 +158,68 @@ fun HomeScreen(
                                         contentDescription = "Search"
                                     )
                                 }
-                                IconButton(onClick = { allItems }) {
+                                IconButton(onClick = { isDropDownMenuExpanded = true }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.baseline_filter_list_24),
                                         contentDescription = "filter"
                                     )
+                                    DropdownMenu(
+                                        expanded = isDropDownMenuExpanded,
+                                        onDismissRequest = { isDropDownMenuExpanded = false }) {
+                                        DropdownMenuItem(
+                                            text = { Text(text = "가나다 순으로 보기") },
+                                            onClick = {
+                                                val sortedItems = allItems.sortedBy {
+                                                    it.title
+                                                }
+                                                allItems = sortedItems
+
+                                                val sortedLikeItems = allItems.sortedBy {
+                                                    it.title
+                                                }
+                                                likeItem = sortedLikeItems
+
+                                                allItemsSaver.value = allItems
+                                                likeItemsSaver.value = likeItem
+                                            }
+                                        )
+
+                                        DropdownMenuItem(
+                                            text = { Text(text = "가장 최근에 작성한 날짜 순으로 보기") },
+                                            onClick = {
+                                                val sortedItems = allItems.sortedBy {
+                                                    it.date
+                                                }
+                                                allItems = sortedItems
+
+                                                val sortedLikeItems = allItems.sortedBy {
+                                                    it.date
+                                                }
+                                                likeItem = sortedLikeItems
+
+                                                allItemsSaver.value = allItems
+                                                likeItemsSaver.value = likeItem
+                                            }
+                                        )
+
+                                        DropdownMenuItem(
+                                            text = { Text(text = "가장 예전에 작성한 날짜 순으로 보기") },
+                                            onClick = {
+                                                val sortedItems = allItems.sortedByDescending {
+                                                    it.date
+                                                }
+                                                allItems = sortedItems
+
+                                                val sortedLikeItems = allItems.sortedByDescending {
+                                                    it.date
+                                                }
+                                                likeItem = sortedLikeItems
+
+                                                allItemsSaver.value = allItems
+                                                likeItemsSaver.value = likeItem
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -174,14 +245,12 @@ fun HomeScreen(
                     ) { page ->
                         when (page) {
                             0 -> DiaryListScreen(
-                                allItems,
-                                viewModel,
+                                allItemsSaver,
                                 callNavController
                             )
 
                             1 -> DiaryListScreen(
-                                likeItem,
-                                viewModel,
+                                likeItemsSaver,
                                 callNavController
                             )
                         }

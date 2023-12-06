@@ -67,6 +67,6 @@ fun SearchScreen(
                 Icon(imageVector = Icons.Default.Search, contentDescription = "search")
             }
         }
-        DiaryListScreen(list = searchResult, viewModel = viewModel, callNavController)
+        DiaryListScreen(searchResult, callNavController)
     }
 }
