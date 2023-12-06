@@ -21,24 +21,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.jm.diarybycompose.R
 import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.ui.MainViewModel
-import com.jm.diarybycompose.util.getMyLocation
 
 @Composable
 fun DiaryListScreen(
-    list: List<ItemEntity>,
-    viewModel: MainViewModel,
+    list: MutableState<List<ItemEntity>>,
     callNavController: (Int) -> Unit,
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -50,7 +50,7 @@ fun DiaryListScreen(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier,
             ) {
-                items(list) { item ->
+                items(list.value) { item ->
                     GridItem(item, viewModel) { id ->
                         callNavController(id)
                     }
@@ -66,7 +66,6 @@ fun GridItem(
     viewModel: MainViewModel,
     onClicked: (Int) -> Unit
 ) {
-    val latLng = getMyLocation(LocalContext.current)
     Column(
         modifier = Modifier.clickable { item.id?.let { onClicked(it) } },
         verticalArrangement = Arrangement.Center,
