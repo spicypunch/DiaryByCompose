@@ -9,12 +9,17 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,8 +27,12 @@ import androidx.compose.ui.unit.dp
 fun Notification(
     callNavController: () -> Unit,
 ) {
-    Toast.makeText(LocalContext.current, "추가예정입니다.", Toast.LENGTH_SHORT).show()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        },
         topBar = {
             TopAppBar(
                 title = { Text(text = "알림", modifier = Modifier.padding(start = 8.dp)) },
@@ -38,6 +47,8 @@ fun Notification(
             )
         },
     ) {
-
+        scope.launch {
+            snackbarHostState.showSnackbar("추가 예정입니다.")
+        }
     }
 }

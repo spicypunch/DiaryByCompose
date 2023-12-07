@@ -36,7 +36,9 @@ fun SearchScreen(
         mutableStateOf("")
     }
     val keyboardController = LocalSoftwareKeyboardController.current
+
     val searchResult = viewModel.searchResult.value
+
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxWidth()) {
             TextField(

@@ -22,6 +22,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,7 +38,7 @@ import com.jm.diarybycompose.ui.MainViewModel
 
 @Composable
 fun DiaryListScreen(
-    list: MutableState<List<ItemEntity>>,
+    diaryList : List<ItemEntity>,
     callNavController: (Int) -> Unit,
     viewModel: MainViewModel = hiltViewModel(),
 ) {
@@ -50,7 +52,7 @@ fun DiaryListScreen(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier,
             ) {
-                items(list.value) { item ->
+                items(diaryList) { item ->
                     GridItem(item, viewModel) { id ->
                         callNavController(id)
                     }
@@ -78,10 +80,10 @@ fun GridItem(
         ) {
             Box() {
                 Image(
-                    painter = rememberAsyncImagePainter(model = if (item.imageUri != "null") item.imageUri else R.drawable.round_menu_book_24),
+                    painter = rememberAsyncImagePainter(model = item.imageUri ?: R.drawable.round_menu_book_24),
                     contentDescription = "MyDiaryImage",
                     modifier = Modifier.size(230.dp),
-                    contentScale = if (item.imageUri != "null") ContentScale.Crop else ContentScale.Fit
+                    contentScale = if (item.imageUri != null) ContentScale.Crop else ContentScale.Fit
                 )
                 Box(
                     modifier = Modifier.fillMaxSize(),

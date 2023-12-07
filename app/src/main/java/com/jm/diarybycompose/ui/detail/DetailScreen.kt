@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,7 +60,7 @@ fun DetailScreen(
                 title = { Text(text = "") },
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = 8.dp)
@@ -81,7 +81,7 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(model = if (itemEntity?.imageUri != "null") itemEntity?.imageUri else R.drawable.round_menu_book_24),
+                    painter = rememberAsyncImagePainter(model = itemEntity?.imageUri ?: R.drawable.round_menu_book_24),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
