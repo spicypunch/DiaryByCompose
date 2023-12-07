@@ -4,6 +4,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -29,11 +31,11 @@ class MainViewModel @Inject constructor(
     private val _getItem = MutableSharedFlow<Boolean>()
     val getItem = _getItem.asSharedFlow()
 
-    private val _allItem = mutableStateOf(emptyList<ItemEntity>())
+    private var _allItem = mutableStateOf(emptyList<ItemEntity>())
     val allItem: State<List<ItemEntity>> = _allItem
 
-    private var _item = mutableStateOf<ItemEntity?>(null)
-    val item: State<ItemEntity?> = _item
+    private var _item = MutableLiveData<ItemEntity?>(null)
+    val item: LiveData<ItemEntity?> = _item
 
     private val _likeItem = mutableStateOf(emptyList<ItemEntity>())
     val likeItem: State<List<ItemEntity>> = _likeItem
@@ -47,17 +49,31 @@ class MainViewModel @Inject constructor(
     fun insertItem(title: String, content: String, imageUri: Uri?, date: String, latLng: LatLng) {
         viewModelScope.launch {
             try {
-                roomRepository.insertItem(
-                    ItemEntity(
-                        title = title,
-                        content = content,
-                        imageUri = imageUri.toString(),
-                        date = date,
-                        like = false,
-                        latitude = latLng.latitude,
-                        longitude = latLng.longitude
+                if (imageUri != null) {
+                    roomRepository.insertItem(
+                        ItemEntity(
+                            title = title,
+                            content = content,
+                            imageUri = imageUri.toString(),
+                            date = date,
+                            like = false,
+                            latitude = latLng.latitude,
+                            longitude = latLng.longitude
+                        )
                     )
-                )
+                } else {
+                    roomRepository.insertItem(
+                        ItemEntity(
+                            title = title,
+                            content = content,
+                            date = date,
+                            like = false,
+                            latitude = latLng.latitude,
+                            longitude = latLng.longitude
+                        )
+                    )
+                }
+
                 _insertResult.emit(true)
             } catch (e: Exception) {
                 Log.e("InsertItemErr", e.toString())
@@ -151,5 +167,25 @@ class MainViewModel @Inject constructor(
 
     fun clickDatePicker(click: Boolean) {
         _datePicker.value = click
+    }
+
+    fun sortedByTitle() {
+        _allItem.value = _allItem.value.sortedBy { it.title }
+        _likeItem.value = _likeItem.value.sortedBy { it.title }
+    }
+
+    fun sortedByDescTitle() {
+        _allItem.value = _allItem.value.sortedByDescending { it.title }
+        _likeItem.value = _likeItem.value.sortedByDescending { it.title }
+    }
+
+    fun sortedByDate() {
+        _allItem.value = _allItem.value.sortedBy { it.date }
+        _likeItem.value = _likeItem.value.sortedBy { it.date }
+    }
+
+    fun sortedByDescDate() {
+        _allItem.value = _allItem.value.sortedByDescending { it.date }
+        _likeItem.value = _likeItem.value.sortedByDescending { it.date }
     }
 }

@@ -1,6 +1,7 @@
 package com.jm.diarybycompose.ui.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,20 +34,24 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Observer
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jm.diarybycompose.R
+import com.jm.diarybycompose.data.domain.model.ItemEntity
 import com.jm.diarybycompose.data.domain.model.MenuItem
 import com.jm.diarybycompose.ui.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -71,19 +76,13 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-    viewModel.getAllItem()
-    viewModel.getLikeItem()
-
-    var allItems = viewModel.allItem.value
-    var likeItem = viewModel.likeItem.value
-
-    val allItemsSaver = remember {
-        mutableStateOf(viewModel.allItem.value)
+    remember {
+        viewModel.getLikeItem()
+        viewModel.getAllItem()
     }
 
-    val likeItemsSaver = remember {
-        mutableStateOf(viewModel.likeItem.value)
-    }
+    val allItems = viewModel.allItem.value
+    val likeItems = viewModel.likeItem.value
 
     LaunchedEffect(Unit) {
         viewModel.insertResult.collectLatest {
@@ -93,6 +92,9 @@ fun HomeScreen(
                 snackbarHostState.showSnackbar("등록에 실패하였습니다.")
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.deleteResult.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar("일기가 삭제되었습니다.")
@@ -100,12 +102,16 @@ fun HomeScreen(
                 snackbarHostState.showSnackbar("삭제에 실패하였습니다.")
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.getItem.collectLatest {
             if (!it) {
                 snackbarHostState.showSnackbar("일기를 가져오는데 실패하였습니다.")
             }
         }
     }
+
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -169,54 +175,28 @@ fun HomeScreen(
                                         DropdownMenuItem(
                                             text = { Text(text = "가나다 순으로 보기") },
                                             onClick = {
-                                                val sortedItems = allItems.sortedBy {
-                                                    it.title
-                                                }
-                                                allItems = sortedItems
+                                                viewModel.sortedByTitle()
+                                            }
+                                        )
 
-                                                val sortedLikeItems = allItems.sortedBy {
-                                                    it.title
-                                                }
-                                                likeItem = sortedLikeItems
-
-                                                allItemsSaver.value = allItems
-                                                likeItemsSaver.value = likeItem
+                                        DropdownMenuItem(
+                                            text = { Text(text = "가나다 역순으로 보기") },
+                                            onClick = {
+                                                viewModel.sortedByDescTitle()
                                             }
                                         )
 
                                         DropdownMenuItem(
                                             text = { Text(text = "가장 최근에 작성한 날짜 순으로 보기") },
                                             onClick = {
-                                                val sortedItems = allItems.sortedBy {
-                                                    it.date
-                                                }
-                                                allItems = sortedItems
-
-                                                val sortedLikeItems = allItems.sortedBy {
-                                                    it.date
-                                                }
-                                                likeItem = sortedLikeItems
-
-                                                allItemsSaver.value = allItems
-                                                likeItemsSaver.value = likeItem
+                                                viewModel.sortedByDate()
                                             }
                                         )
 
                                         DropdownMenuItem(
                                             text = { Text(text = "가장 예전에 작성한 날짜 순으로 보기") },
                                             onClick = {
-                                                val sortedItems = allItems.sortedByDescending {
-                                                    it.date
-                                                }
-                                                allItems = sortedItems
-
-                                                val sortedLikeItems = allItems.sortedByDescending {
-                                                    it.date
-                                                }
-                                                likeItem = sortedLikeItems
-
-                                                allItemsSaver.value = allItems
-                                                likeItemsSaver.value = likeItem
+                                                viewModel.sortedByDescDate()
                                             }
                                         )
                                     }
@@ -245,12 +225,12 @@ fun HomeScreen(
                     ) { page ->
                         when (page) {
                             0 -> DiaryListScreen(
-                                allItemsSaver,
+                                allItems,
                                 callNavController
                             )
 
                             1 -> DiaryListScreen(
-                                likeItemsSaver,
+                                likeItems,
                                 callNavController
                             )
                         }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +37,9 @@ fun MapScreen(
     onClicked: (Int) -> Unit
 ) {
     viewModel.getAllItem()
+
     val allItems = viewModel.allItem.value
+
     val latLng = getMyLocation(LocalContext.current)
 
     val cameraPositionState = rememberCameraPositionState {
@@ -56,27 +59,27 @@ fun MapScreen(
     ) {
         for (i in allItems) {
             var image: BitmapDescriptor? = null
-            loadBitmapFromUri(LocalContext.current, Uri.parse(i.imageUri)) { bitmapDescriptor ->
-                image = bitmapDescriptor
-            }
             if (i.imageUri != null) {
+                loadBitmapFromUri(LocalContext.current, Uri.parse(i.imageUri)) { bitmapDescriptor ->
+                    image = bitmapDescriptor
+                }
                 Marker(
                     state = MarkerState(position = LatLng(i.latitude, i.longitude)),
                     title = i.title,
                     icon = image,
-                    onClick = {
-                        i.id?.let { id -> onClicked(id) }
-                        true
-                    }
+//                    onClick = {
+//                        i.id?.let { id -> onClicked(id) }
+//                        true
+//                    }
                 )
             } else {
                 Marker(
                     state = MarkerState(position = LatLng(i.latitude, i.longitude)),
                     title = i.title,
-                    onClick = {
-                        i.id?.let { id -> onClicked(id) }
-                        true
-                    }
+//                    onClick = {
+//                        i.id?.let { id -> onClicked(id) }
+//                        true
+//                    }
                 )
             }
         }
